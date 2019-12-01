@@ -4,4 +4,4 @@
 //affiche le panneau d'aide
 void help();
 
-#endif
+#endif //DEF_HELP_H

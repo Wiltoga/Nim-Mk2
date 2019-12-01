@@ -13,4 +13,4 @@ enum bool
 };
 typedef enum bool bool;
 
-#endif
+#endif //DEF_BOOL_H

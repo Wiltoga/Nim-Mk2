@@ -16,7 +16,7 @@ int main()
         //http://patorjk.com/software/taag/#p=display&f=Standard&t=Nim
         printf("  _   _ _           \n | \\ | (_)_ __ ___  \n |  \\| | | '_ ` _ \\ \n | |\\  | | | | | | |\n |_| \\_|_|_| |_| |_|\n");
         printf("______________________\npar Nathan HANEN, Tom SUBLET, Husein PARIC\n\n");
-        printf(FRONT_GREY BACK_BLACK "utiliser les fleches pour se deplacer, Entree pour valider.\n\n");
+        printf(FRONT_GREY BACK_BLACK "Utiliser les fleches pour se deplacer, Entree pour valider.\n\n");
         if (index == 0)//couleur "jouer"
             printf(FRONT_BLACK BACK_BRIGHT_GREEN);
         else

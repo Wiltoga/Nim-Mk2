@@ -10,15 +10,17 @@ GamePlate* createPlate(GameOptions options)
     plate->nbRows = options.nlig;
     plate->cases = malloc(options.nlig*options.ncol*sizeof(Case*));//on créé le tableau
     int i, j;//indexeurs
+    int winningHint = ((options.nlig - 1) + (options.ncol - 1)*2)%3;
     for (i = 0;i<options.nlig;i++)
         for (j = 0;j<options.ncol;j++)
         {
             //pour chaque case du tableau, on créé un objet Case
             Case* tmpCase = malloc(sizeof(Case));
-            plate->cases[j + i*plate->nbColumns] = tmpCase;
+            plate->cases[j + i*options.ncol] = tmpCase;
             tmpCase->position = newPosition(j, i);
+            tmpCase->winning = (i + j*2)%3 == winningHint;//test de case gagnante
         }
-    //todo : fill it randomly, set the winning tiles
+    //todo : fill it randomly
 }
 Case* accessCase(GamePlate* plate, Position pos)
 {

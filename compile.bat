@@ -1,1 +1,1 @@
-gcc main.c consoleManagement.c game.c -o out.exe
+gcc main.c consoleManagement.c game.c -o nim.exe

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <conio.h>
 #include "consoleManagement.h"
 
@@ -10,6 +11,7 @@ void moveCurs(int X, int Y)
 }
 int getArrowPressed()
 {
+    //inspiré de https://stackoverflow.com/a/10473315
     int var = getch();//on récupère le code du caractère entré dans la console
     if (var == 0 || var == 24)//s'il s'agit d'une flèche...
     {
@@ -30,4 +32,13 @@ int getArrowPressed()
     else
         return NONE;
     
+}
+void clearScreen()
+{
+    system(
+    #ifdef WIN32
+    "cls");
+    #else
+    "clear");
+    #endif
 }

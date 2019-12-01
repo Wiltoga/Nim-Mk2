@@ -45,5 +45,7 @@
 void moveCurs(int, int);
 //fonction qui renvoie le code de la touche flèche pressée (et la touche retour)
 int getArrowPressed();
+//efface la mémoire de la console
+void clearScreen();
 
 #endif

@@ -13,7 +13,7 @@ int getArrowPressed()
 {
     //inspiré de https://stackoverflow.com/a/10473315
     int var = getch();//on récupère le code du caractère entré dans la console
-    if (var == 0 || var == 24)//s'il s'agit d'une flèche...
+    if (var == 0 || var == 224)//s'il s'agit d'une flèche...
     {
         switch (getch())
         {

@@ -28,7 +28,7 @@
 #define BACK_BRIGHT_YELLOW  "\x1b[103m"
 #define FRONT_BRIGHT_BLUE   "\x1b[94m"
 #define BACK_BRIGHT_BLUE    "\x1b[104m"
-#define FRONT_BRIGHT_MAGENTA"\x1b[95m"
+#define FRONT_BRIGHT_MAGENTA "\x1b[95m"
 #define BACK_BRIGHT_MAGENTA "\x1b[105m"
 #define FRONT_BRIGHT_CYAN   "\x1b[96m"
 #define BACK_BRIGHT_CYAN    "\x1b[106m"

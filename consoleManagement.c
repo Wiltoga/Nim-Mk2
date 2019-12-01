@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 #include "consoleManagement.h"
 
 //fonction qui déplace le curseur de la console (caret) aux coordonnées données

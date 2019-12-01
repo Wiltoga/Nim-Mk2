@@ -2,6 +2,6 @@
 #define DEF_GAME_H
 
 
-
+void startGame();
 
 #endif

@@ -34,6 +34,8 @@
 #define BACK_BRIGHT_CYAN        "\x1b[106m"
 #define FRONT_WHITE             "\x1b[97m"
 #define BACK_WHITE              "\x1b[107m"
+
+//ces codes sont retournés par getArrowPressed()
 #define NONE -1
 #define UP 0
 #define DOWN 1

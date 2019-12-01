@@ -4,6 +4,7 @@
 #include "game.h"
 #include "consoleManagement.h"
 #include "bool.h"
+#include "help.h"
 
 int main()
 {
@@ -14,7 +15,7 @@ int main()
         printf(FRONT_BRIGHT_CYAN BACK_BLACK);
         //http://patorjk.com/software/taag/#p=display&f=Standard&t=Nim
         printf("  _   _ _           \n | \\ | (_)_ __ ___  \n |  \\| | | '_ ` _ \\ \n | |\\  | | | | | | |\n |_| \\_|_|_| |_| |_|\n");
-        printf("______________________\n\n");
+        printf("______________________\npar Nathan HANEN, Tom SUBLET, Husein PARIC\n\n");
         printf(FRONT_GREY BACK_BLACK "utiliser les fleches pour se deplacer, Entree pour valider.\n\n");
         if (index == 0)//couleur "jouer"
             printf(FRONT_BLACK BACK_BRIGHT_GREEN);
@@ -42,10 +43,11 @@ int main()
         case RETURN:
             switch (index)
             {
-            case 0:
+            case 0://démarrer le jeu
                 startGame();
                 break;
             case 1://aide
+                help();
                 break;
             case 2://quitter
              //reset de la couleur de la console

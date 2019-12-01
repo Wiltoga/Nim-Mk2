@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "GamePlate.h"
+#include "Position.h"
 
 GamePlate* createPlate(GameOptions options)
 {

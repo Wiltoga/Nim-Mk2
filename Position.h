@@ -11,13 +11,7 @@ struct Position
     unsigned int y;
 };
 typedef struct Position Position;
-
-inline Position newPosition(unsigned int x, unsigned int y)
-{
-    Position res;
-    res.x = x;
-    res.y = y;
-    return res;
-}
+//créé un nouvel objet Position selon les arguments donnés (x, y)
+Position newPosition(unsigned int, unsigned int);
 
 #endif //DEF_POSITION_H

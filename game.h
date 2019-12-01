@@ -8,4 +8,4 @@ void startGame();
 //défini les paramètres de lancement
 void parameters();
 
-#endif
+#endif //DEF_GAME_H

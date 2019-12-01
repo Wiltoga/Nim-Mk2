@@ -12,4 +12,12 @@ struct Position
 };
 typedef struct Position Position;
 
+inline Position newPosition(unsigned int x, unsigned int y)
+{
+    Position res;
+    res.x = x;
+    res.y = y;
+    return res;
+}
+
 #endif //DEF_POSITION_H

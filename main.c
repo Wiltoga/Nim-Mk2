@@ -3,6 +3,7 @@
 #include <conio.h>
 #include "game.h"
 #include "consoleManagement.h"
+#include "bool.h"
 
 int main()
 {

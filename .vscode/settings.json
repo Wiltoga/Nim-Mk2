@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "consolecolors.h": "c"
+        "consolecolors.h": "c",
+        "consolemanagement.h": "c",
+        "conio.h": "c"
     }
 }

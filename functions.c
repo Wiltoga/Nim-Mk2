@@ -17,6 +17,6 @@
          printf("The number is not part of the interval.\n");
      }
       if ((entier1<=VMAX) && (entier1>=VMIN))
-      printf("%d est compris dans l'intervalle.", entier1);
+      printf("%d is a part of the interval.", entier1);
     
   }

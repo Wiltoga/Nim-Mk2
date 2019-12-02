@@ -3,11 +3,16 @@
 #include "Case.h"
 #include "gameOptions.h"
 
+//class représentant le plateau de jeu
 struct GamePlate
 {
+    //les cases du tableau
     Table cases;
+    //le nombre de colonnes
     size_t nbColumns;
+    //le nombre de lignes
     size_t nbRows;
+    //la difficulté de l'IA
     Difficulty level;
 };
 typedef struct GamePlate GamePlate;

@@ -19,17 +19,9 @@ void startGame()
     {
         //si le tour est au joueur
         if (playerTurn)
-        {
             pawn = Player(plate, pawn); //on mets à jour notre place après sélection
-        }
         else
-        {
-            Position IAPos = IA(plate, pawn); //on récupère les mouvements de l'IA
-            renderPlate(plate, pawn, IAPos);  //on affiche...
-            printf("L'ordinateur joue... Appuyez sur Entree\n");
-            while (getArrowPressed() != RETURN);         //on attend d'appuyer sur Entrée
-            pawn = IAPos; //on mets à jour notre place après sélection de l'IA
-        }
+            pawn = IA(plate, pawn); //on mets à jour notre place après sélection de l'IA
 
         playerTurn = !playerTurn; //on échange de joueur
     }
@@ -287,22 +279,33 @@ Position IAPlaysVeryHard(GamePlate *plate, Position currPos)
 //on fait jouer l'IA
 Position IA(GamePlate *plate, Position currPos)
 {
+    Position newPos;
     switch (plate->level)
     {
     case BEGINNER: //si on est en mode débutant
         //on joue aléatoirement
-        return IAPlaysRandomly(plate, currPos);
+        newPos =  IAPlaysRandomly(plate, currPos);
+        break;
     case MEDIUM: //si on est en mode moyen
         //on joue 1/3 gagnant, 2/3 aléatoirement
-        return rand() % 3 == 0 ? IAPlaysHard(plate, currPos) : IAPlaysRandomly(plate, currPos);
+        newPos =  rand() % 3 == 0 ? IAPlaysHard(plate, currPos) : IAPlaysRandomly(plate, currPos);
+        break;
     case EXPERT: //si on est en expert
         //on joue 2/3 gagnant, 1/3 aléatoirement
-        return rand() % 3 <= 1 ? IAPlaysHard(plate, currPos) : IAPlaysRandomly(plate, currPos);
+        newPos =  rand() % 3 <= 1 ? IAPlaysHard(plate, currPos) : IAPlaysRandomly(plate, currPos);
+        break;
     case VIRTUOSO: //si on est en virtuose
         //on joue toujours avec la stratégie gagnante
-        return IAPlaysHard(plate, currPos);
+        newPos =  IAPlaysHard(plate, currPos);
+        break;
     case GODLIKE: //si on est en mode divin
         //on joue toujours avec la stratégie gagnante ET en essayant de piéger le joueur
-        return IAPlaysVeryHard(plate, currPos);
+        newPos =  IAPlaysVeryHard(plate, currPos);
+        break;
     }
+    renderPlate(plate, currPos, newPos);  //on affiche...
+    printf("L'ordinateur joue... Appuyez sur Entree\n");
+    printf("%d\n", plate->level);
+    while (getArrowPressed() != RETURN);         //on attend d'appuyer sur Entrée
+    return newPos;
 }

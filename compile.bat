@@ -1,1 +1,1 @@
-gcc main.c consoleManagement.c game.c help.c GamePlate.c Position.c -o nim.exe
+gcc src/main.c src/consoleManagement.c src/game.c src/help.c src/GamePlate.c src/Position.c src/utilities.c -o nim.exe

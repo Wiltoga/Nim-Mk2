@@ -5,6 +5,7 @@
 #include "consoleManagement.h"
 #include "bool.h"
 #include "GamePlate.h"
+#include "utilities.h"
 
 void startGame()
 {
@@ -105,5 +106,6 @@ GameOptions parameters()
         index = (index + 4)%4; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
         clearScreen();
     }
+    options.nban = random(0, max(options.ncol, options.nlig)+1);//on prend un nombre aléatoire de cases bannies
     return options;
 }

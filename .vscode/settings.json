@@ -3,6 +3,7 @@
         "consolecolors.h": "c",
         "consolemanagement.h": "c",
         "conio.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "stdlib.h": "c"
     }
 }

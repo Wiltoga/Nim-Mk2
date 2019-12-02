@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <time.h>
 #include "game.h"
 #include "consoleManagement.h"
 #include "bool.h"
@@ -8,6 +9,7 @@
 
 int main()
 {
+    srand(time(NULL));
     clearScreen();
     int index = 0; //l'index représente la position du curseur dans les menus
     while (true)//boucle du jeu

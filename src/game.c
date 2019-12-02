@@ -11,8 +11,66 @@ void startGame()
 {
     GameOptions options = parameters();
     GamePlate* plate = createPlate(options);
+    Position pawn = newPosition(0, 0);
+    bool playerTurn = options.next;
+    while (pawn.x != plate->nbColumns-1 || pawn.y != plate->nbRows-1)
+    {
+        Case* currentCase = accessCase(plate, pawn);
+        if (playerTurn)
+        {
+            Position futurePos = pawn;
+            int pressedKey;
+            do
+            {
+                renderPlate(plate, pawn, futurePos);
+                printf("Votre tour !\n");
+                pressedKey = getArrowPressed();
+                switch (pressedKey)
+                {
+                case UP:
+                    if (futurePos.y == pawn.y + 2)
+                        if (containsPosition(newPosition(futurePos.x, futurePos.y-1), currentCase->availableMovements, 4))
+                            futurePos.y--;
+                    break;
+                case DOWN:
+                    {
+                        Position tmpPos = futurePos;
+                        tmpPos.y++;
+                        tmpPos.x = pawn.x;
+                        if (containsPosition(tmpPos, currentCase->availableMovements, 4))
+                        {
+                            futurePos.y++;
+                            futurePos.x = pawn.x;
+                        }
+                    }
+                    break;
+                case LEFT:
+                    if (futurePos.x == pawn.x + 2)
+                        if (containsPosition(newPosition(futurePos.x-1, futurePos.y), currentCase->availableMovements, 4))
+                            futurePos.x--;
+                    break;
+                case RIGHT:
+                    {
+                        Position tmpPos = futurePos;
+                        tmpPos.x++;
+                        tmpPos.y = pawn.y;
+                        if (containsPosition(tmpPos, currentCase->availableMovements, 4))
+                        {
+                            futurePos.x++;
+                            futurePos.y = pawn.y;
+                        }
+                    }
+                    break;
+                }
+            } while (pressedKey != RETURN || pawn.x != futurePos.x && pawn.y != futurePos.y);
+            pawn = futurePos;
+        }
+        else
+        {
 
-
+        }
+        playerTurn = !playerTurn;
+    }
 
 
     freePlate(plate);

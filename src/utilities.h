@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "bool.h"
 #include "Case.h"
+#include "Position.h"
 
 //génère un nombre aléatoire entre un minimum et un maximum
 int random(int, int);
@@ -12,5 +13,7 @@ int max(int, int);
 int min(int, int);
 //renvoie true si la case passée en paramètre est dans le tableau
 bool containsCase(Case*, Table, size_t);
+//renvoie true si la position passée en paramètre est trouvée parmis les cases du tableau
+bool containsPosition(Position, Table, size_t);
 
 #endif

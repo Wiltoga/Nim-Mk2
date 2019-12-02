@@ -276,7 +276,6 @@ Position IAPlaysVeryHard(GamePlate *plate, Position currPos)
     return IAPlaysRandomly(plate, currPos);
 }
 
-//on fait jouer l'IA
 Position IA(GamePlate *plate, Position currPos)
 {
     Position newPos;

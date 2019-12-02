@@ -157,10 +157,10 @@ Position IA(GamePlate* plate, Position curPos)
 
                 Case* nextCase = accessCase(&plate, nextPos);
                 int nextDistanceX, nextDistanceY;
-                if(!(nextCase->banned))
+                if(nextCase->winning)
                 {
                     // cherche la case gagnante la plus proche
-                    if(nextCase->winning)
+                    if(!(nextCase->banned))
                     {
                         isWinCaseFounded = true;
                         nextDistanceX = nextCase->position.x - curPos.x;
@@ -168,43 +168,40 @@ Position IA(GamePlate* plate, Position curPos)
                         if(distanceX < nextDistanceX || distanceY < nextDistanceY)
                             newPos = nextCase->position;
                     }
-                    else if(!isWinCaseFounded)
+                    else if(i == 0 || i == 2)
                     {
-                        // prépare un coup au hasard
-                        Position rndPos;
-                        do
-                        {
-                            int rndPosX;
-                            int rndPosY;
-                            rndPosX = random(curPos.x, curPos.x+2);
-                            rndPosY = random(curPos.y, curPos.y+2);
-
-                            if(
-                                (rndPosX == curPos.x && rndPosY > curPos.y)
-                                || (rndPosX > curPos.x && rndPosY == curPos.y)
-                            )
-                            {
-                                nextPos = newPosition(rndPosX, rndPosY);
-                                nextCase = accessCase(&plate, rndPos);
-                                if(!(nextCase->banned))
-                                    break;
-                            }
-                                
-                        } 
-                        while (true);
+                        /* 
+                            si une case adjacente est bloqué, on ne peux acceder à
+                            celles qui se trouve dans la même direction, donc on saute
+                            une étape pour regarder dans une autre direction.
+                        */
+                        i++;
                     }
-                    
                 }
-                else if(i == 0 || i == 2)
+                else if(!isWinCaseFounded)
                 {
-                    /* 
-                        si une case adjacente est bloqué, on ne peux acceder à
-                        celles qui se trouve dans la même direction, donc on saute
-                        une étape pour regarder dans une autre direction.
-                    */
-                    i++;
+                    // prépare un coup au hasard
+                    Position rndPos;
+                    do
+                    {
+                        int rndPosX;
+                        int rndPosY;
+                        rndPosX = random(curPos.x, curPos.x+2);
+                        rndPosY = random(curPos.y, curPos.y+2);
+
+                        if(
+                            (rndPosX == curPos.x && rndPosY > curPos.y)
+                            || (rndPosX > curPos.x && rndPosY == curPos.y)
+                        )
+                        {
+                            nextPos = newPosition(rndPosX, rndPosY);
+                            nextCase = accessCase(&plate, rndPos);
+                            if(!(nextCase->banned))
+                                break;
+                        }      
+                    } 
+                    while (true);
                 }
-                
             }
             break;
         case 5:

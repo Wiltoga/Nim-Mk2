@@ -10,6 +10,7 @@
 void startGame();
 //défini les paramètres de lancement
 GameOptions parameters();
+Position Player(GamePlate*, Position);
 //donne à l'IA la possibilité de jouer un tour en modifiant la position du pion
 Position IA(GamePlate*, Position);
 

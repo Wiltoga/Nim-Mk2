@@ -17,64 +17,10 @@ void startGame()
     //tant que le pion est en dehors du puit...
     while (pawn.x != plate->nbColumns-1 || pawn.y != plate->nbRows-1)
     {
-        Case* currentCase = accessCase(plate, pawn); //on récupère la case actuelle
-
         //si le tour est au joueur
         if (playerTurn)
         {
-            Position futurePos = pawn; //on stocke la position voulue du joueur dans cette variable
-            int pressedKey; //on stocke la touche pressée ici
-            do
-            {
-                //boucle du tour
-                renderPlate(plate, pawn, futurePos); //on affiche le plateau
-                printf("Votre tour !\n");
-
-                pressedKey = getArrowPressed(); //on récupère la touche pressée
-                switch (pressedKey)
-                {
-                case UP: //si on a appuyé sur haut
-                    if (futurePos.y > pawn.y) //et qu'on s'est déplacé vers le bas précédemment
-                        futurePos.y--; //on remonte
-                    break;
-                case DOWN: //si on a appuyé sur bas
-                    {
-                        Position tmpPos = futurePos; //on stocke l'éventuelle position future
-                        tmpPos.y++; //on mets à jour cette éventuelle position
-                        tmpPos.x = pawn.x; 
-
-                        //on vérifie qu'elle est valide
-                        if (containsPosition(tmpPos, currentCase->availableMovements, 4))
-                        {
-                            //si elle l'est, on mets à jour la position voulue
-                            futurePos.y++;
-                            futurePos.x = pawn.x;
-                        }
-                    }
-                    break;
-                case LEFT: //si on a appuyé sur gauche
-                    if (futurePos.x > pawn.x) //et qu'on s'est déplacé vers la droite précédemment
-                        futurePos.x--; //on va à gauche
-                    break;
-                case RIGHT: //si on a appuyé sur droite
-                    {
-                        Position tmpPos = futurePos; //on stocke l'éventuelle position future
-                        tmpPos.x++; //on mets à jour cette éventuelle position
-                        tmpPos.y = pawn.y;
-
-                        //on vérifie qu'elle est valide
-                        if (containsPosition(tmpPos, currentCase->availableMovements, 4))
-                        {
-                            //si elle l'est, on mets à jour la position voulue
-                            futurePos.x++;
-                            futurePos.y = pawn.y;
-                        }
-                    }
-                    break;
-                }
-                //tant que la touche Entrée n'a pas été pressée et que le pion est à une position différente de l'origine
-            } while (pressedKey != RETURN || !(pawn.x != futurePos.x || pawn.y != futurePos.y));
-            pawn = futurePos; //on mets à jour notre place après sélection
+            pawn = Player(plate); //on mets à jour notre place après sélection
         }
         else
         {
@@ -205,6 +151,64 @@ GameOptions parameters()
     }
     options.nban = random(0, max(options.ncol, options.nlig)+1); //on prend un nombre aléatoire de cases bannies
     return options;
+}
+
+void Player(GamePlate* plate, Position pawn)
+{
+    Case* currentCase = accessCase(plate, pawn); //on récupère la case actuelle
+    Position futurePos = pawn; //on stocke la position voulue du joueur dans cette variable
+            int pressedKey; //on stocke la touche pressée ici
+            do
+            {
+                //boucle du tour
+                renderPlate(plate, pawn, futurePos); //on affiche le plateau
+                printf("Votre tour !\n");
+
+                pressedKey = getArrowPressed(); //on récupère la touche pressée
+                switch (pressedKey)
+                {
+                case UP: //si on a appuyé sur haut
+                    if (futurePos.y > pawn.y) //et qu'on s'est déplacé vers le bas précédemment
+                        futurePos.y--; //on remonte
+                    break;
+                case DOWN: //si on a appuyé sur bas
+                    {
+                        Position tmpPos = futurePos; //on stocke l'éventuelle position future
+                        tmpPos.y++; //on mets à jour cette éventuelle position
+                        tmpPos.x = pawn.x; 
+
+                        //on vérifie qu'elle est valide
+                        if (containsPosition(tmpPos, currentCase->availableMovements, 4))
+                        {
+                            //si elle l'est, on mets à jour la position voulue
+                            futurePos.y++;
+                            futurePos.x = pawn.x;
+                        }
+                    }
+                    break;
+                case LEFT: //si on a appuyé sur gauche
+                    if (futurePos.x > pawn.x) //et qu'on s'est déplacé vers la droite précédemment
+                        futurePos.x--; //on va à gauche
+                    break;
+                case RIGHT: //si on a appuyé sur droite
+                    {
+                        Position tmpPos = futurePos; //on stocke l'éventuelle position future
+                        tmpPos.x++; //on mets à jour cette éventuelle position
+                        tmpPos.y = pawn.y;
+
+                        //on vérifie qu'elle est valide
+                        if (containsPosition(tmpPos, currentCase->availableMovements, 4))
+                        {
+                            //si elle l'est, on mets à jour la position voulue
+                            futurePos.x++;
+                            futurePos.y = pawn.y;
+                        }
+                    }
+                    break;
+                }
+                //tant que la touche Entrée n'a pas été pressée et que le pion est à une position différente de l'origine
+            } while (pressedKey != RETURN || !(pawn.x != futurePos.x || pawn.y != futurePos.y));
+    return futurePos;
 }
 
 //l'IA va jouer aléatoirement

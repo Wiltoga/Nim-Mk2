@@ -21,6 +21,9 @@ GamePlate* createPlate(GameOptions options)
             tmpCase->winning = (i + j*2)%3 == winningHint;//test de case gagnante
         }
     //todo : fill it randomly
+
+
+    return plate;
 }
 Case* accessCase(GamePlate* plate, Position pos)
 {

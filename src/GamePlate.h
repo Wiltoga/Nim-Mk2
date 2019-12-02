@@ -6,8 +6,8 @@
 struct GamePlate
 {
     Table cases;
-    int nbColumns;
-    int nbRows;
+    size_t nbColumns;
+    size_t nbRows;
 };
 typedef struct GamePlate GamePlate;
 

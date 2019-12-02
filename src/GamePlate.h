@@ -8,6 +8,7 @@ struct GamePlate
     Table cases;
     size_t nbColumns;
     size_t nbRows;
+    Difficulty level;
 };
 typedef struct GamePlate GamePlate;
 

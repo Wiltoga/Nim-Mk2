@@ -11,6 +11,7 @@ GamePlate* createPlate(GameOptions options)
     //simple assignation des tailles
     plate->nbColumns = options.ncol;
     plate->nbRows = options.nlig;
+    plate->level = options.niveau;
     plate->cases = malloc(options.nlig*options.ncol*sizeof(Case*));//on créé le tableau
     int i, j;//indexeurs
     //l'indice de victoire est une valeur qui permet de savoir si une case est gagnante ou pas

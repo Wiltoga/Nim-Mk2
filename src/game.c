@@ -62,16 +62,26 @@ void startGame()
                     }
                     break;
                 }
-            } while (pressedKey != RETURN || pawn.x != futurePos.x && pawn.y != futurePos.y);
+            } while (pressedKey != RETURN || !(pawn.x != futurePos.x || pawn.y != futurePos.y));
             pawn = futurePos;
         }
         else
         {
-
+            Position IAPos = IA(plate, pawn);
+            renderPlate(plate, pawn, IAPos);
+            printf("L'ordinateur joue... Appuyez sur Entree\n");
+            while (getArrowPressed() != RETURN);
+            pawn = IAPos;
         }
         playerTurn = !playerTurn;
     }
-
+    clearScreen();
+    if (!playerTurn)
+        printf("\n" BACK_BRIGHT_CYAN FRONT_BLACK "Le joueur a gagne !");
+    else
+        printf("\n" BACK_RED FRONT_WHITE "Le joueur a perdu !");
+    printf(BACK_BLACK "\n\n" BACK_BRIGHT_RED FRONT_BLACK "Retour" BACK_BLACK "\n");
+    while (getArrowPressed() != RETURN);
 
     freePlate(plate);
 }
@@ -172,98 +182,70 @@ GameOptions parameters()
     options.nban = random(0, max(options.ncol, options.nlig)+1);//on prend un nombre aléatoire de cases bannies
     return options;
 }
-
-Position IA(GamePlate* plate, Position curPos)
+Position IAPlaysRandomly(GamePlate* plate, Position currPos)
 {
-    Position newPos;
-    GameOptions options;
-    bool isWinCaseFounded = false;
-
-    switch(options.niveau)
+    Case* current = accessCase(plate, currPos);
+    while(true)
     {
-        case 1:
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-        case 4:
-            // On met les distances au maximum pour être sûr de trouver la case gagnante la plus proche
-            int i, distanceX = options.ncol, distanceY = options.nlig;
-            for(i = 0; i < 4; i++) //4 directions
-            {
-                Position nextPos;
-                switch(i)
-                {
-                    case 0:
-                        // 1 case à droite
-                        nextPos = newPosition(curPos.x+1, curPos.y);
-                        break;
-                    case 1:
-                        // 2 cases à droite
-                        nextPos = newPosition(curPos.x+2, curPos.y);
-                        break;
-                    case 2:
-                        // 1 case en bas
-                        nextPos = newPosition(curPos.x, curPos.y+1);
-                        break;
-                    case 3:
-                        // 2 cases en bas
-                        nextPos = newPosition(curPos.x, curPos.y+2);
-                        break;
-                }
-
-                Case* nextCase = accessCase(&plate, nextPos);
-                int nextDistanceX, nextDistanceY;
-                if(nextCase->winning)
-                {
-                    // cherche la case gagnante la plus proche
-                    if(!(nextCase->banned))
-                    {
-                        isWinCaseFounded = true;
-                        nextDistanceX = nextCase->position.x - curPos.x;
-                        nextDistanceY = nextCase->position.y - curPos.y;
-                        if(distanceX < nextDistanceX || distanceY < nextDistanceY)
-                            newPos = nextCase->position;
-                    }
-                    else if(i == 0 || i == 2)
-                    {
-                        /* 
-                            si une case adjacente est bloqué, on ne peux acceder à
-                            celles qui se trouve dans la même direction, donc on saute
-                            une étape pour regarder dans une autre direction.
-                        */
-                        i++;
-                    }
-                }
-                else if(!isWinCaseFounded)
-                {
-                    // prépare un coup au hasard
-                    Position rndPos;
-                    do
-                    {
-                        int rndPosX;
-                        int rndPosY;
-                        rndPosX = random(curPos.x, curPos.x+2);
-                        rndPosY = random(curPos.y, curPos.y+2);
-
-                        if(
-                            (rndPosX == curPos.x && rndPosY > curPos.y)
-                            || (rndPosX > curPos.x && rndPosY == curPos.y)
-                        )
-                        {
-                            nextPos = newPosition(rndPosX, rndPosY);
-                            nextCase = accessCase(&plate, rndPos);
-                            if(!(nextCase->banned))
-                                break;
-                        }      
-                    } 
-                    while (true);
-                }
-            }
-            break;
-        case 5:
-            break;
+        int randomIndex = random(0, 4);
+        if (current->availableMovements[randomIndex] != NULL)
+            return current->availableMovements[randomIndex]->position;
     }
-    return newPos;
+}
+Position IAPlaysHard(GamePlate* plate, Position currPos)
+{
+    Case* current = accessCase(plate, currPos);
+    int i;
+    for(i = 0;i<4;i++)
+    {
+        if (current->availableMovements[i] != NULL &&
+            current->availableMovements[i]->winning)
+            return current->availableMovements[i]->position;
+    }
+    return IAPlaysRandomly(plate, currPos);
+}
+Position IAPlaysVeryHard(GamePlate* plate, Position currPos)
+{
+    Case* current = accessCase(plate, currPos);
+    int i;
+    for(i = 0;i<4;i++)
+    {
+        if (current->availableMovements[i] != NULL &&
+            current->availableMovements[i]->winning)
+            return current->availableMovements[i]->position;
+    }
+    for(i = 0;i<4;i++)
+    {
+        Case* caseToTest = current->availableMovements[i];
+        if (caseToTest != NULL)
+        {
+            int j;
+            bool hasWinningPossibilities = false;
+            for(j = 0;j<4;j++)
+            {
+                if (caseToTest->availableMovements[j] != NULL &&
+                    caseToTest->availableMovements[j]->winning)
+                    hasWinningPossibilities = true;
+            }
+            if (!hasWinningPossibilities)
+                return caseToTest->position;
+        }
+    }
+    return IAPlaysRandomly(plate, currPos);
+}
+Position IA(GamePlate* plate, Position currPos)
+{
+    switch(plate->level)
+    {
+        case BEGINNER:
+            return IAPlaysRandomly(plate, currPos);
+        case MEDIUM:
+            return rand()%3 == 0 ? IAPlaysHard(plate, currPos) : IAPlaysRandomly(plate, currPos);
+        case EXPERT:
+            return rand()%3 <= 1 ? IAPlaysHard(plate, currPos) : IAPlaysRandomly(plate, currPos);
+        case VIRTUOSO:
+            return IAPlaysHard(plate, currPos);
+        case GODLIKE:
+        return IAPlaysVeryHard(plate, currPos);
+    }
 }

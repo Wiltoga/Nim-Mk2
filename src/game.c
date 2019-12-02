@@ -9,13 +9,13 @@
 
 void startGame()
 {
-    GameOptions options = parameters(); //on appelle le générateur de paramètres
-    GamePlate* plate = createPlate(options); //on créé le plateau de jeu
-    Position pawn = newPosition(0, 0); //on place le pion à (0,0)
-    bool playerTurn = options.next; //on défini par rapport aux paramètres qui commence
+    GameOptions options = parameters();      //on appelle le générateur de paramètres
+    GamePlate *plate = createPlate(options); //on créé le plateau de jeu
+    Position pawn = newPosition(0, 0);       //on place le pion à (0,0)
+    bool playerTurn = options.next;          //on défini par rapport aux paramètres qui commence
 
     //tant que le pion est en dehors du puit...
-    while (pawn.x != plate->nbColumns-1 || pawn.y != plate->nbRows-1)
+    while (pawn.x != plate->nbColumns - 1 || pawn.y != plate->nbRows - 1)
     {
         //si le tour est au joueur
         if (playerTurn)
@@ -25,17 +25,17 @@ void startGame()
         else
         {
             Position IAPos = IA(plate, pawn); //on récupère les mouvements de l'IA
-            renderPlate(plate, pawn, IAPos); //on affiche...
+            renderPlate(plate, pawn, IAPos);  //on affiche...
             printf("L'ordinateur joue... Appuyez sur Entree\n");
-            while (getArrowPressed() != RETURN); //on attend d'appuyer sur Entrée
+            while (getArrowPressed() != RETURN);         //on attend d'appuyer sur Entrée
             pawn = IAPos; //on mets à jour notre place après sélection de l'IA
         }
-        
+
         playerTurn = !playerTurn; //on échange de joueur
     }
     //si on est ici, on a un vainqueur
     clearScreen();
-    
+
     if (!playerTurn) //si l'un ou l'autre a gagngé..
         printf("\n" BACK_BRIGHT_CYAN FRONT_BLACK "Le joueur a gagne !");
     else
@@ -44,7 +44,8 @@ void startGame()
     //formattage du bouton Retour
     printf(BACK_BLACK "\n\n" BACK_BRIGHT_RED FRONT_BLACK "Retour" BACK_BLACK "\n");
     //on attend la touche Entrée
-    while (getArrowPressed() != RETURN);
+    while (getArrowPressed() != RETURN)
+        ;
     //on libère la RAM
     freePlate(plate);
 }
@@ -115,7 +116,7 @@ GameOptions parameters()
             options.niveau = index;
             break;
         }
-        index = (index + 5)%5; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
+        index = (index + 5) % 5; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
         clearScreen();
     }
     options.next = -1;
@@ -146,90 +147,90 @@ GameOptions parameters()
             options.next = !index;
             break;
         }
-        index = (index + 2)%2; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
+        index = (index + 2) % 2; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
         clearScreen();
     }
-    options.nban = random(0, max(options.ncol, options.nlig)+1); //on prend un nombre aléatoire de cases bannies
+    options.nban = random(0, max(options.ncol, options.nlig) + 1); //on prend un nombre aléatoire de cases bannies
     return options;
 }
 
-void Player(GamePlate* plate, Position pawn)
+void Player(GamePlate *plate, Position pawn)
 {
-    Case* currentCase = accessCase(plate, pawn); //on récupère la case actuelle
-    Position futurePos = pawn; //on stocke la position voulue du joueur dans cette variable
-            int pressedKey; //on stocke la touche pressée ici
-            do
+    Case *currentCase = accessCase(plate, pawn); //on récupère la case actuelle
+    Position futurePos = pawn;                   //on stocke la position voulue du joueur dans cette variable
+    int pressedKey;                              //on stocke la touche pressée ici
+    do
+    {
+        //boucle du tour
+        renderPlate(plate, pawn, futurePos); //on affiche le plateau
+        printf("Votre tour !\n");
+
+        pressedKey = getArrowPressed(); //on récupère la touche pressée
+        switch (pressedKey)
+        {
+        case UP:                      //si on a appuyé sur haut
+            if (futurePos.y > pawn.y) //et qu'on s'est déplacé vers le bas précédemment
+                futurePos.y--;        //on remonte
+            break;
+        case DOWN: //si on a appuyé sur bas
+        {
+            Position tmpPos = futurePos; //on stocke l'éventuelle position future
+            tmpPos.y++;                  //on mets à jour cette éventuelle position
+            tmpPos.x = pawn.x;
+
+            //on vérifie qu'elle est valide
+            if (containsPosition(tmpPos, currentCase->availableMovements, 4))
             {
-                //boucle du tour
-                renderPlate(plate, pawn, futurePos); //on affiche le plateau
-                printf("Votre tour !\n");
+                //si elle l'est, on mets à jour la position voulue
+                futurePos.y++;
+                futurePos.x = pawn.x;
+            }
+        }
+        break;
+        case LEFT:                    //si on a appuyé sur gauche
+            if (futurePos.x > pawn.x) //et qu'on s'est déplacé vers la droite précédemment
+                futurePos.x--;        //on va à gauche
+            break;
+        case RIGHT: //si on a appuyé sur droite
+        {
+            Position tmpPos = futurePos; //on stocke l'éventuelle position future
+            tmpPos.x++;                  //on mets à jour cette éventuelle position
+            tmpPos.y = pawn.y;
 
-                pressedKey = getArrowPressed(); //on récupère la touche pressée
-                switch (pressedKey)
-                {
-                case UP: //si on a appuyé sur haut
-                    if (futurePos.y > pawn.y) //et qu'on s'est déplacé vers le bas précédemment
-                        futurePos.y--; //on remonte
-                    break;
-                case DOWN: //si on a appuyé sur bas
-                    {
-                        Position tmpPos = futurePos; //on stocke l'éventuelle position future
-                        tmpPos.y++; //on mets à jour cette éventuelle position
-                        tmpPos.x = pawn.x; 
-
-                        //on vérifie qu'elle est valide
-                        if (containsPosition(tmpPos, currentCase->availableMovements, 4))
-                        {
-                            //si elle l'est, on mets à jour la position voulue
-                            futurePos.y++;
-                            futurePos.x = pawn.x;
-                        }
-                    }
-                    break;
-                case LEFT: //si on a appuyé sur gauche
-                    if (futurePos.x > pawn.x) //et qu'on s'est déplacé vers la droite précédemment
-                        futurePos.x--; //on va à gauche
-                    break;
-                case RIGHT: //si on a appuyé sur droite
-                    {
-                        Position tmpPos = futurePos; //on stocke l'éventuelle position future
-                        tmpPos.x++; //on mets à jour cette éventuelle position
-                        tmpPos.y = pawn.y;
-
-                        //on vérifie qu'elle est valide
-                        if (containsPosition(tmpPos, currentCase->availableMovements, 4))
-                        {
-                            //si elle l'est, on mets à jour la position voulue
-                            futurePos.x++;
-                            futurePos.y = pawn.y;
-                        }
-                    }
-                    break;
-                }
-                //tant que la touche Entrée n'a pas été pressée et que le pion est à une position différente de l'origine
-            } while (pressedKey != RETURN || !(pawn.x != futurePos.x || pawn.y != futurePos.y));
+            //on vérifie qu'elle est valide
+            if (containsPosition(tmpPos, currentCase->availableMovements, 4))
+            {
+                //si elle l'est, on mets à jour la position voulue
+                futurePos.x++;
+                futurePos.y = pawn.y;
+            }
+        }
+        break;
+        }
+        //tant que la touche Entrée n'a pas été pressée et que le pion est à une position différente de l'origine
+    } while (pressedKey != RETURN || !(pawn.x != futurePos.x || pawn.y != futurePos.y));
     return futurePos;
 }
 
 //l'IA va jouer aléatoirement
-Position IAPlaysRandomly(GamePlate* plate, Position currPos)
+Position IAPlaysRandomly(GamePlate *plate, Position currPos)
 {
-    Case* current = accessCase(plate, currPos); //case sur laquelle se trouve le pion
-    while(true)
+    Case *current = accessCase(plate, currPos); //case sur laquelle se trouve le pion
+    while (true)
     {
         //tant qu'on a pas trouvé une position valide, on teste...
         int randomIndex = random(0, 4);
-        if (current->availableMovements[randomIndex] != NULL) //si notre position est valide,
+        if (current->availableMovements[randomIndex] != NULL)          //si notre position est valide,
             return current->availableMovements[randomIndex]->position; //on renvoie cette sélection
     }
 }
 
 //l'IA applique la stratégie gagnante
-Position IAPlaysHard(GamePlate* plate, Position currPos)
+Position IAPlaysHard(GamePlate *plate, Position currPos)
 {
-    Case* current = accessCase(plate, currPos); //case sur laquelle se trouve le pion
+    Case *current = accessCase(plate, currPos); //case sur laquelle se trouve le pion
     int i;
-    for(i = 0;i<4;i++)
+    for (i = 0; i < 4; i++)
     {
         //on cherche une case gagnante parmis celles disponibles
         if (current->availableMovements[i] != NULL &&
@@ -241,11 +242,11 @@ Position IAPlaysHard(GamePlate* plate, Position currPos)
 }
 
 //l'IA applique la stratégie gagnante et en tente de gagner en cas de position perdante
-Position IAPlaysVeryHard(GamePlate* plate, Position currPos)
+Position IAPlaysVeryHard(GamePlate *plate, Position currPos)
 {
-    Case* current = accessCase(plate, currPos); //case sur laquelle se trouve le pion
+    Case *current = accessCase(plate, currPos); //case sur laquelle se trouve le pion
     int i;
-    for(i = 0;i<4;i++)
+    for (i = 0; i < 4; i++)
     {
         //on cherche une case gagnante parmis celles disponibles
         if (current->availableMovements[i] != NULL &&
@@ -254,16 +255,16 @@ Position IAPlaysVeryHard(GamePlate* plate, Position currPos)
     }
 
     //on a pas trouvé de case gagnante, on cherche à contrer le joueur
-    for(i = 0;i<4;i++)
+    for (i = 0; i < 4; i++)
     {
-        Case* caseToTest = current->availableMovements[i];
-        
+        Case *caseToTest = current->availableMovements[i];
+
         //on test chaque case possible
         if (caseToTest != NULL)
         {
             int j;
             bool hasWinningPossibilities = false; //on vérifie si chaque mouvement possible donne lieu à un mouvement gagnant
-            for(j = 0;j<4;j++)
+            for (j = 0; j < 4; j++)
             {
                 if (caseToTest->availableMovements[j] != NULL &&
                     caseToTest->availableMovements[j]->winning)
@@ -284,24 +285,24 @@ Position IAPlaysVeryHard(GamePlate* plate, Position currPos)
 }
 
 //on fait jouer l'IA
-Position IA(GamePlate* plate, Position currPos)
+Position IA(GamePlate *plate, Position currPos)
 {
-    switch(plate->level)
+    switch (plate->level)
     {
-        case BEGINNER: //si on est en mode débutant
-            //on joue aléatoirement
-            return IAPlaysRandomly(plate, currPos);
-        case MEDIUM: //si on est en mode moyen
-            //on joue 1/3 gagnant, 2/3 aléatoirement
-            return rand()%3 == 0 ? IAPlaysHard(plate, currPos) : IAPlaysRandomly(plate, currPos);
-        case EXPERT: //si on est en expert
-            //on joue 2/3 gagnant, 1/3 aléatoirement
-            return rand()%3 <= 1 ? IAPlaysHard(plate, currPos) : IAPlaysRandomly(plate, currPos);
-        case VIRTUOSO: //si on est en virtuose
-            //on joue toujours avec la stratégie gagnante
-            return IAPlaysHard(plate, currPos);
-        case GODLIKE: //si on est en mode divin
-            //on joue toujours avec la stratégie gagnante ET en essayant de piéger le joueur
-            return IAPlaysVeryHard(plate, currPos);
+    case BEGINNER: //si on est en mode débutant
+        //on joue aléatoirement
+        return IAPlaysRandomly(plate, currPos);
+    case MEDIUM: //si on est en mode moyen
+        //on joue 1/3 gagnant, 2/3 aléatoirement
+        return rand() % 3 == 0 ? IAPlaysHard(plate, currPos) : IAPlaysRandomly(plate, currPos);
+    case EXPERT: //si on est en expert
+        //on joue 2/3 gagnant, 1/3 aléatoirement
+        return rand() % 3 <= 1 ? IAPlaysHard(plate, currPos) : IAPlaysRandomly(plate, currPos);
+    case VIRTUOSO: //si on est en virtuose
+        //on joue toujours avec la stratégie gagnante
+        return IAPlaysHard(plate, currPos);
+    case GODLIKE: //si on est en mode divin
+        //on joue toujours avec la stratégie gagnante ET en essayant de piéger le joueur
+        return IAPlaysVeryHard(plate, currPos);
     }
 }

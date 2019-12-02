@@ -19,6 +19,7 @@ GamePlate* createPlate(GameOptions options)
         {
             //pour chaque case du tableau, on créé un objet Case
             Case* tmpCase = malloc(sizeof(Case));
+            tmpCase->banned = false;
             plate->cases[j + i*options.ncol] = tmpCase;
             tmpCase->position = newPosition(j, i);
             tmpCase->winning = (i + j*2)%3 == winningHint;//test de case gagnante
@@ -36,11 +37,11 @@ GamePlate* createPlate(GameOptions options)
             /*
              * pour les tests suivants, on peut tout mettre dans un seul grand if
              * mais pour des raisons de lisibilité, on segmente
-            */
+             */
             if (
                     //si la case se trouve dans un des deux coins autorisés
                     (x == 0 && y == plate->nbRows-1 ||
-                    x == plate->nbRows-1 && y != 0)
+                    x == plate->nbRows-1 && y == 0)
                     ||
                     //si la case se trouve dans la "partie centrale" du plateau
                     (x > 0 && x < plate->nbColumns-1 &&
@@ -56,7 +57,7 @@ GamePlate* createPlate(GameOptions options)
                     if (x == 0 && !accessCase(plate, newPosition(x+1, y-1))->banned)
                         nextBan = true;
                     //s'il s'agit de la case en haut à droite et qu'elle n'a pas de case bannnies dans la diagonale
-                    else if (x == 0 && !accessCase(plate, newPosition(x-1, y+1))->banned)
+                    else if (y == 0 && !accessCase(plate, newPosition(x-1, y+1))->banned)
                         nextBan = true;
                     else if (//sinon si aucune des cases dans sa diagonale (cases interdites) n'est occupée
                             !accessCase(plate, newPosition(x-1, y+1))->banned &&

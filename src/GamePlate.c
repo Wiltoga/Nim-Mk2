@@ -69,6 +69,91 @@ GamePlate* createPlate(GameOptions options)
                 accessCase(plate, newPosition(x, y))->banned = true;
         }
     }
+    for (i = 0;i<plate->nbColumns;i++)
+        for (j = 0;j<plate->nbRows;j++)
+        {
+            //on parcours tout le tableau pour désigner les cases voisines
+            //curr est la case actuelle à traiter
+            Case* curr = accessCase(plate, newPosition(i, j));
+            /*
+             * on alloue un tableau de 4 cases voisines potentielles
+             * chaque case du tableau possèdera la case voisine en question, ou NULL si
+             * elle est indisponible (bloquée par un mur, case bannie)
+             */
+            curr->availableMovements = malloc(4*sizeof(Case*));
+            //si on se trouve à une extremité de l'axe x
+            if (i == plate->nbColumns-1)
+            {
+                //on mets les deux à NULL puisqu'on se trouve collé à un mur
+                curr->availableMovements[0] = NULL;
+                curr->availableMovements[1] = NULL;
+            }
+            //si on se trouve une case avant le mur
+            else if (i == plate->nbColumns-2)
+            {
+                //on récupère la case à droite
+                Case* tmp = accessCase(plate, newPosition(i+1, j));
+                //si elle n'est pas bannie, on l'ajoute aux voisines
+                curr->availableMovements[0] = tmp->banned ? NULL : tmp;
+                //la case suivante est le mur -> on n'en ajoute pas
+                curr->availableMovements[1] = NULL;
+            }
+            else
+            {
+                //ici on se trouve ailleurs dans le plateau
+                //on récupère la case à droite
+                Case* tmp = accessCase(plate, newPosition(i+1, j));
+                //si elle n'est pas bannie, on l'ajoute aux voisines
+                curr->availableMovements[0] = tmp->banned ? NULL : tmp;
+                //si cette même case n'est pas bannie, on continue de vérifier les déplacements
+                if (!tmp->banned)
+                {
+                    //on récupère la case suivante
+                    tmp = accessCase(plate, newPosition(i+2, j));
+                    //si elle n'est pas bannie, on l'ajoute aux voisines
+                    curr->availableMovements[1] = tmp->banned ? NULL : tmp;
+                }
+                else
+                    //sinon, on n'ajoute rien au delà de la case bannie
+                    curr->availableMovements[1] = NULL;
+            }
+            //si on se trouve à une extremité de l'axe y
+            if (j == plate->nbRows-1)
+            {
+                //on mets les deux à NULL puisqu'on se trouve collé à un mur
+                curr->availableMovements[2] = NULL;
+                curr->availableMovements[3] = NULL;
+            }
+            //si on se trouve une case avant le mur
+            else if (j == plate->nbRows-2)
+            {
+                //on récupère la case en dessous
+                Case* tmp = accessCase(plate, newPosition(i, j+1));
+                //si elle n'est pas bannie, on l'ajoute aux voisines
+                curr->availableMovements[2] = tmp->banned ? NULL : tmp;
+                //la case suivante est le mur -> on n'en ajoute pas
+                curr->availableMovements[3] = NULL;
+            }
+            else
+            {
+                //ici on se trouve ailleurs dans le plateau
+                //on récupère la case en dessous
+                Case* tmp = accessCase(plate, newPosition(i, j+1));
+                //si elle n'est pas bannie, on l'ajoute aux voisines
+                curr->availableMovements[2] = tmp->banned ? NULL : tmp;
+                //si cette même case n'est pas bannie, on continue de vérifier les déplacements
+                if (!tmp->banned)
+                {
+                    //on récupère la case suivante
+                    tmp = accessCase(plate, newPosition(i, j+2));
+                    //si elle n'est pas bannie, on l'ajoute aux voisines
+                    curr->availableMovements[3] = tmp->banned ? NULL : tmp;
+                }
+                else
+                    //sinon, on n'ajoute rien au delà de la case bannie
+                    curr->availableMovements[3] = NULL;
+            }
+        }
 
 
     return plate;
@@ -83,7 +168,10 @@ void freePlate(GamePlate* plate)
     int i;//indexeur
     for (i = 0;i<plate->nbRows*plate->nbColumns;i++)
     //pour chaque element du tableau, on supprime la case
+    {
+        free(plate->cases[i]->availableMovements);
         free(plate->cases[i]);
+    }
     //on supprime le tableau
     free(plate->cases);
     //on supprime le plateau

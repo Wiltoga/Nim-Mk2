@@ -20,7 +20,7 @@ void startGame()
         //si le tour est au joueur
         if (playerTurn)
         {
-            pawn = Player(plate); //on mets à jour notre place après sélection
+            pawn = Player(plate, pawn); //on mets à jour notre place après sélection
         }
         else
         {
@@ -154,7 +154,7 @@ GameOptions parameters()
     return options;
 }
 
-void Player(GamePlate *plate, Position pawn)
+Position Player(GamePlate *plate, Position pawn)
 {
     Case *currentCase = accessCase(plate, pawn); //on récupère la case actuelle
     Position futurePos = pawn;                   //on stocke la position voulue du joueur dans cette variable

@@ -182,33 +182,49 @@ void freePlate(GamePlate* plate)
 }
 void renderPlate(GamePlate* plate, Position pawnPos, Position currentSelection)
 {
+    //on efface l'écran
     clearScreen();
+    //sélection de la couleur d'écriture
     printf(FRONT_WHITE);
+    //indexs
     int i, j;
+    //la case sur laquelle se trouve le pion
     Case* pawnCase = accessCase(plate, newPosition(pawnPos.x, pawnPos.y));
     for (j = 0;j<plate->nbRows;j++)
     {
         for (i = 0;i<plate->nbColumns;i++)
         {
+           //pour chaque case du plateau
+
+           //on en récupère la case 
             Case* currentCase = accessCase(plate, newPosition(i, j));
             if (currentCase == pawnCase)
+                //si la case est celle du pion, on mets en jaune
                 printf(BACK_YELLOW);
             else if (containsCase(currentCase, pawnCase->availableMovements, 4) &&
                     i == plate->nbColumns-1 && j == plate->nbRows-1)
+                //si la case est le puit et qu'il est disponible, on le mets en doré
                 printf(BACK_BRIGHT_YELLOW);
             else if (i == plate->nbColumns-1 && j == plate->nbRows-1)
+                //si la case est juste le puit, on mets en vert
                 printf(BACK_GREEN);
             else if (containsCase(currentCase, pawnCase->availableMovements, 4))
+                //si la case correspond à un mouvement autorisé, on mets en bleu
                 printf(BACK_BLUE);
             else if (currentCase->banned)
+                //si la case est bannie, on mets en rouge
                 printf(BACK_RED);
             else
+                //sinon, on colore le fond du plateau en gris
                 printf(BACK_GREY);
             if (currentSelection.x == i && currentSelection.y == j)
+                //si on se trouve sur la selection de position du pion, on mets un triangle
                 printf("/\\");
             else
+                //sinon on mets rien
                 printf("  ");
         }
+        //chaque ligne doit se finir par du noir, sinon toute la ligne de la console sera de la couleur précédente
         printf(BACK_BLACK "\n");
     }
 }

@@ -61,6 +61,11 @@ GameOptions parameters()
         else
             printf(FRONT_RED BACK_BLACK);
         printf("virtuose" BACK_BLACK "\n");
+        if (index == 4)//couleur "divin"
+            printf(FRONT_MAGENTA BACK_RED "D I V I N");
+        else
+            printf(FRONT_BRIGHT_MAGENTA BACK_BLACK "divin");
+        printf(BACK_BLACK "\n");
         switch (getArrowPressed())
         {
         case UP:
@@ -73,7 +78,7 @@ GameOptions parameters()
             options.niveau = index;
             break;
         }
-        index = (index + 4)%4; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
+        index = (index + 5)%5; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
         clearScreen();
     }
     options.next = -1;
@@ -103,7 +108,7 @@ GameOptions parameters()
             options.next = !index;
             break;
         }
-        index = (index + 4)%4; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
+        index = (index + 2)%2; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
         clearScreen();
     }
     options.nban = random(0, max(options.ncol, options.nlig)+1);//on prend un nombre aléatoire de cases bannies

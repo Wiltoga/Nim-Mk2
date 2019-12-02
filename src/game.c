@@ -19,19 +19,31 @@ void startGame()
     {
         //si le tour est au joueur
         if (playerTurn)
-            pawn = Player(plate, pawn); //on mets à jour notre place après sélection
-        else
+            pawn = Player(plate, pawn, plate->level == MULTIPLAYER ? ", joueur 1" : ""); //on mets à jour notre place après sélection
+        else if (plate->level != MULTIPLAYER)
             pawn = IA(plate, pawn); //on mets à jour notre place après sélection de l'IA
+        else
+            pawn = Player(plate, pawn, ", joueur 2"); //on mets à jour notre place après sélection
 
         playerTurn = !playerTurn; //on échange de joueur
     }
     //si on est ici, on a un vainqueur
     clearScreen();
 
-    if (!playerTurn) //si l'un ou l'autre a gagngé..
-        printf("\n" BACK_BRIGHT_CYAN FRONT_BLACK "Le joueur a gagne !");
+    if (plate->level == MULTIPLAYER)
+    {
+        if (!playerTurn) //si l'un ou l'autre a gagngé..
+            printf("\n" BACK_BRIGHT_CYAN FRONT_BLACK "Le joueur 1 a gagne !");
+        else
+            printf("\n" BACK_MAGENTA FRONT_WHITE "Le joueur 2 a gagne !");
+    }
     else
-        printf("\n" BACK_RED FRONT_WHITE "Le joueur a perdu !");
+    {
+        if (!playerTurn) //si l'un ou l'autre a gagngé..
+            printf("\n" BACK_BRIGHT_CYAN FRONT_BLACK "Le joueur a gagne !");
+        else
+            printf("\n" BACK_RED FRONT_WHITE "Le joueur a perdu !");
+    }
 
     //formattage du bouton Retour
     printf(BACK_BLACK "\n\n" BACK_BRIGHT_RED FRONT_BLACK "Retour" BACK_BLACK "\n");
@@ -67,7 +79,40 @@ GameOptions parameters()
     clearScreen();
 
     options.niveau = -1;
-    int index = 0; //selecteur
+    int index = 1; //selecteur
+    while (options.niveau == -1)
+    {
+        printf(FRONT_WHITE BACK_BLACK "Multijoueur ?\n");
+        if (index == 0) //couleur "oui"
+            printf(FRONT_BLACK BACK_BRIGHT_CYAN);
+        else
+            printf(FRONT_CYAN BACK_BLACK);
+        printf("Oui" BACK_BLACK "\n");
+        if (index == 1) //couleur "non"
+            printf(FRONT_BLACK BACK_BRIGHT_MAGENTA);
+        else
+            printf(FRONT_MAGENTA BACK_BLACK);
+        printf("Non" BACK_BLACK "\n");
+        switch (getArrowPressed())
+        {
+        case UP:
+            index--;
+            break;
+        case DOWN:
+            index++;
+            break;
+        case RETURN:
+            options.niveau = index;
+            break;
+        }
+        index = (index + 2) % 2; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
+        clearScreen();
+    }
+    if (options.niveau)
+        options.niveau = -1;
+    else
+        options.niveau = MULTIPLAYER;
+    index = 0; //selecteur
     while (options.niveau == -1)
     {
         printf(FRONT_WHITE BACK_BLACK "difficulte de l'ordinateur :\n");
@@ -121,12 +166,18 @@ GameOptions parameters()
             printf(FRONT_BLACK BACK_BRIGHT_CYAN);
         else
             printf(FRONT_CYAN BACK_BLACK);
-        printf("le joueur" BACK_BLACK "\n");
+        if (options.niveau == MULTIPLAYER)
+            printf("le joueur 1" BACK_BLACK "\n");
+        else
+            printf("le joueur" BACK_BLACK "\n");
         if (index == 1) //couleur "moyen"
             printf(FRONT_BLACK BACK_BRIGHT_MAGENTA);
         else
             printf(FRONT_MAGENTA BACK_BLACK);
-        printf("l'ordinateur" BACK_BLACK "\n");
+        if (options.niveau == MULTIPLAYER)
+            printf("le joueur 2" BACK_BLACK "\n");
+        else
+            printf("l'ordinateur" BACK_BLACK "\n");
         switch (getArrowPressed())
         {
         case UP:
@@ -146,7 +197,7 @@ GameOptions parameters()
     return options;
 }
 
-Position Player(GamePlate *plate, Position pawn)
+Position Player(GamePlate *plate, Position pawn, char* playerName)
 {
     Case *currentCase = accessCase(plate, pawn); //on récupère la case actuelle
     Position futurePos = pawn;                   //on stocke la position voulue du joueur dans cette variable
@@ -155,7 +206,7 @@ Position Player(GamePlate *plate, Position pawn)
     {
         //boucle du tour
         renderPlate(plate, pawn, futurePos); //on affiche le plateau
-        printf("Votre tour !\n");
+        printf("Votre tour%s !\n", playerName);
 
         pressedKey = getArrowPressed(); //on récupère la touche pressée
         switch (pressedKey)

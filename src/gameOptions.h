@@ -9,7 +9,8 @@ enum Difficulty
     MEDIUM,
     EXPERT,
     VIRTUOSO,
-    GODLIKE
+    GODLIKE,
+    MULTIPLAYER
 };
 typedef enum Difficulty Difficulty;
 //Structure contenant l'ensemble des informations utiles à la création d'une partie de jeu

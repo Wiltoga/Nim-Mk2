@@ -17,5 +17,7 @@ GamePlate* createPlate(GameOptions);
 Case* accessCase(GamePlate*, Position);
 //libère un plateau
 void freePlate(GamePlate*);
+//affiche le plateau à l'écran en donnant la position du pion au début du tour et sa position temporaire choisie
+void renderPlate(GamePlate*, Position, Position);
 
 #endif //DEF_GAME_PLATE_H

@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include "consoleManagement.h"
 #include "GamePlate.h"
 #include "Position.h"
 #include "utilities.h"
@@ -176,4 +178,36 @@ void freePlate(GamePlate* plate)
     free(plate->cases);
     //on supprime le plateau
     free(plate);
+}
+void renderPlate(GamePlate* plate, Position pawnPos, Position currentSelection)
+{
+    clearScreen();
+    printf(FRONT_WHITE);
+    int i, j;
+    Case* pawnCase = accessCase(plate, newPosition(pawnPos.x, pawnPos.y));
+    for (j = 0;j<plate->nbRows;j++)
+    {
+        for (i = 0;i<plate->nbColumns;i++)
+        {
+            Case* currentCase = accessCase(plate, newPosition(i, j));
+            if (currentCase == pawnCase)
+                printf(BACK_YELLOW);
+            else if (containsCase(currentCase, pawnCase->availableMovements, 4) &&
+                    i == plate->nbColumns-1 && j == plate->nbRows-1)
+                printf(BACK_BRIGHT_YELLOW);
+            else if (i == plate->nbColumns-1 && j == plate->nbRows-1)
+                printf(BACK_GREEN);
+            else if (containsCase(currentCase, pawnCase->availableMovements, 4))
+                printf(BACK_BLUE);
+            else if (currentCase->banned)
+                printf(BACK_RED);
+            else
+                printf(BACK_GREY);
+            if (currentSelection.x == i && currentSelection.y == j)
+                printf("/\\");
+            else
+                printf("  ");
+        }
+        printf(BACK_BLACK "\n");
+    }
 }

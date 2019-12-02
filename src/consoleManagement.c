@@ -31,8 +31,10 @@ void clearScreen()
 {
     system(
     #ifdef WIN32
+    //si on est sur Windows
     "cls");
     #else
+    //si on est sur Unix
     "clear");
     #endif
 }

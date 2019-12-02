@@ -1,12 +1,13 @@
 #Here you can find all the functions used in the game
 
 
-
+---
 1) "Lire_entier" is a function which takes a number and displays it
 
-------------------------------------------------------------------------------------------------
+
 ```C
 #include <stdio.h>
+
 #define VMIN 5
 #define VMAX 30
 
@@ -24,16 +25,17 @@
         return entier1;
   }
 ```
-  ------------------------------------------------------------------------------------------------
+  ---
 
 
 2) "Parametres" is a function that will take the number of lines and columns as well as the level and the difficulty. It's task is the random selection of restricted fields.
 
-------------------------------------------------------------------------------------------------
+
 ```C
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
 #define VMAX 30
 #define VMIN 5
 #define NIVMAX 4
@@ -82,4 +84,4 @@ int Parametres(int nlig, int ncol, int niveau, next, int nban)
 
 
 
-------------------------------------------------------------------------------------------------
+---

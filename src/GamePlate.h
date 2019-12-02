@@ -6,23 +6,17 @@
 //class représentant le plateau de jeu
 struct GamePlate
 {
-    //les cases du tableau
-    Table cases;
-    //le nombre de colonnes
-    size_t nbColumns;
-    //le nombre de lignes
-    size_t nbRows;
-    //la difficulté de l'IA
-    Difficulty level;
+    Table cases; //les cases du tableau
+    size_t nbColumns; //le nombre de colonnes
+    size_t nbRows; //le nombre de lignes
+    Difficulty level; //la difficulté de l'IA
 };
 typedef struct GamePlate GamePlate;
 
-//créé un tableau rempli un tableau selon certaines règles
-GamePlate* createPlate(GameOptions);
-//accède à une certaine case du plateau selon une position donnée
-Case* accessCase(GamePlate*, Position);
-//libère un plateau
-void freePlate(GamePlate*);
+GamePlate* createPlate(GameOptions); //créé un tableau rempli un tableau selon certaines règles
+Case* accessCase(GamePlate*, Position); //accède à une certaine case du plateau selon une position donnée
+void freePlate(GamePlate*); //libère un plateau
+
 //affiche le plateau à l'écran en donnant la position du pion au début du tour et sa position temporaire choisie
 void renderPlate(GamePlate*, Position, Position);
 

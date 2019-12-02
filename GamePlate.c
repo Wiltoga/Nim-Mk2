@@ -10,6 +10,8 @@ GamePlate* createPlate(GameOptions options)
     plate->nbRows = options.nlig;
     plate->cases = malloc(options.nlig*options.ncol*sizeof(Case*));//on créé le tableau
     int i, j;//indexeurs
+    //l'indice de victoire est une valeur qui permet de savoir si une case est gagnante ou pas
+    //étant donné que le plateau suit un shéma particulier (une diagonale de case perdante puis 2 diagonales de cases gagnantes)
     int winningHint = ((options.nlig - 1) + (options.ncol - 1)*2)%3;
     for (i = 0;i<options.nlig;i++)
         for (j = 0;j<options.ncol;j++)
@@ -20,7 +22,7 @@ GamePlate* createPlate(GameOptions options)
             tmpCase->position = newPosition(j, i);
             tmpCase->winning = (i + j*2)%3 == winningHint;//test de case gagnante
         }
-    //todo : fill it randomly
+    //todo : fill it randomly with banned cases
 
 
     return plate;

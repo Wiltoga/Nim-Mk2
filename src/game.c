@@ -355,7 +355,6 @@ Position IA(GamePlate *plate, Position currPos)
     }
     renderPlate(plate, currPos, newPos);  //on affiche...
     printf("L'ordinateur joue... Appuyez sur Entree\n");
-    printf("%d\n", plate->level);
     while (getArrowPressed() != RETURN);         //on attend d'appuyer sur Entrée
     return newPos;
 }

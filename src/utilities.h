@@ -6,7 +6,7 @@
 #include "Position.h"
 
 //génère un nombre aléatoire entre un minimum et un maximum
-int random(int, int);
+int randomNumber(int, int);
 //renvoie la plus grande valeur
 int max(int, int);
 //renvoie la plus petite valeur

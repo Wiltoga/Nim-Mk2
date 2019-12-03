@@ -1,6 +1,6 @@
 #include "utilities.h"
 
-inline int random(int min, int max)
+inline int randomNumber(int min, int max)
 {
     return min + rand()%(max - min);
 }

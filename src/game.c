@@ -193,7 +193,7 @@ GameOptions parameters()
         index = (index + 2) % 2; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
         clearScreen();
     }
-    options.nban = random(0, max(options.ncol, options.nlig) + 1); //on prend un nombre aléatoire de cases bannies
+    options.nban = randomNumber(0, max(options.ncol, options.nlig) + 1); //on prend un nombre aléatoire de cases bannies
     return options;
 }
 
@@ -262,7 +262,7 @@ Position IAPlaysRandomly(GamePlate *plate, Position currPos)
     while (true)
     {
         //tant qu'on a pas trouvé une position valide, on teste...
-        int randomIndex = random(0, 4);
+        int randomIndex = randomNumber(0, 4);
         if (current->availableMovements[randomIndex] != NULL)          //si notre position est valide,
             return current->availableMovements[randomIndex]->position; //on renvoie cette sélection
     }

@@ -39,8 +39,8 @@ GamePlate* createPlate(GameOptions options)
         while (!nextBan)//tant que les tests sont négatifs
         {
             //on génère les coordonnées de la prochaine case à bannir
-            int x = random(0, plate->nbColumns);
-            int y = random(0, plate->nbRows);
+            int x = randomNumber(0, plate->nbColumns);
+            int y = randomNumber(0, plate->nbRows);
 
             /*
              * pour les tests suivants, on peut tout mettre dans un seul grand if

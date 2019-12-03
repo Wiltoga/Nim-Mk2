@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <time.h>
 #include "game.h"
 #include "consoleManagement.h"
@@ -60,7 +59,6 @@ int main()
         }
         index = (index + 3)%3; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
         clearScreen();
-}
-    
+      }
     return 0;
 }

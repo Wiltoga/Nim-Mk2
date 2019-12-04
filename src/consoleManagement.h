@@ -43,6 +43,12 @@
 #define RIGHT 3
 #define RETURN 4
 
+#ifndef WIN32
+char getch();
+
+char getche();
+#endif
+
 //fonction qui renvoie le code de la touche flèche pressée (et la touche retour)
 int getArrowPressed();
 //efface la mémoire de la console

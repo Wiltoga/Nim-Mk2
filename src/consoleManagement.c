@@ -53,8 +53,35 @@ char getche(void)
 {
   return getch_(1);
 }
+int getArrowPressed()
+{
+    //inspiré de https://stackoverflow.com/a/10473315
+    int var = getch();//code de la touche pressée
+    if (var == 27) //s'il s'agit d'une flèche part1...
+    {
+        if (getch() == 91) //s'il s'agit d'une flèche part2...
+        {
+            switch (getch())
+            {
+            case 65: //code fèche haut
+                return UP;
+            case 66: //code fèche bas
+                return DOWN;
+            case 68: //code fèche gauche
+                return LEFT;
+            case 67: //code fèche droite
+                return RIGHT;
+            }
+        }
+    }
+    else if (var == 10) //entrée
+        return RETURN;
+    else
+        return NONE;
 
-#endif
+}
+
+#else
 int getArrowPressed()
 {
     //inspiré de https://stackoverflow.com/a/10473315
@@ -79,6 +106,8 @@ int getArrowPressed()
         return NONE;
 
 }
+#endif
+
 void clearScreen()
 {
     system(

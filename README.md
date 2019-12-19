@@ -2,12 +2,20 @@
 
 Jeu de Nim en console, avec couleurs et interface utilisateur.
 
-## installation et lancement
+## Installation et lancement
 
-taper dans le terminal (ne pas oublier de changer les permissions du fichier créé) :
-```powershell
+### Linux
+
+```shell
 make
 ./bin/nim
 ```
 
-Sous Windows, taper `mingw32-make` à la place de `make`
+### Windows
+
+Nécessite d'avoir installé [MinGW](https://docs.google.com/document/d/1IYkS_ZOven-HJ6rKV5-hOzKwNFjYbwX55mPAaJxsUok/edit?usp=sharing).
+
+```shell
+mingw32-make
+./bin/nim.exe
+```

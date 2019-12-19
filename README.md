@@ -7,6 +7,7 @@ Jeu de Nim en console, avec couleurs et interface utilisateur.
 taper dans le terminal (ne pas oublier de changer les permissions du fichier créé) :
 ```powershell
 make
-./nim
+./bin/nim
 ```
 
+Sous Windows, taper `mingw32-make` à la place de `make`

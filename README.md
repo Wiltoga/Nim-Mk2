@@ -7,11 +7,9 @@
 
 - [Nim-Mk2](#nim-mk2)
   - [Installation](#installation)
+  - [Utilisation](#utilisation)
     - [Linux](#linux)
     - [Windows](#windows)
-  - [Utilisation](#utilisation)
-    - [Linux](#linux-1)
-    - [Windows](#windows-1)
   - [Historique des Versions](#historique-des-versions)
   - [Meta](#meta)
   - [Contribute](#contribute)
@@ -22,17 +20,16 @@
 
 Télécharger la [dernière version](https://github.com/WildGoat07/Nim-Mk2/releases/latest/download/nim.exe) **OU** Copiez / téléchargez le repo (cette méthode nécessite de rebuild le projet).
 
-### Linux
+Sur Linux :
 
-```bash
+```powershell
 make
 ```
+Ou sur Windows :
 
-### Windows
+> Nécessite d'avoir installé [MinGW](https://docs.google.com/document/d/1IYkS_ZOven-HJ6rKV5-hOzKwNFjYbwX55mPAaJxsUok/edit?usp=sharing).
 
-Nécessite d'avoir installé [MinGW](https://docs.google.com/document/d/1IYkS_ZOven-HJ6rKV5-hOzKwNFjYbwX55mPAaJxsUok/edit?usp=sharing).
-
-```ps
+```powershell
 mingw32-make
 ```
 
@@ -40,13 +37,13 @@ mingw32-make
 
 ### Linux
 
-```bash
+```powershell
 ./bin/nim
 ```
 
 ### Windows
 
-```ps
+```powershell
 ./bin/nim.exe
 ```
 

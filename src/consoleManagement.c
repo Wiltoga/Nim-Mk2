@@ -1,12 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef WIN32
-#include <conio.h>
-#else
-#include <termios.h>
-#endif
 #include "consoleManagement.h"
 #ifndef WIN32
+#pragma region Unix
+#include <termios.h>
 //https://www.includehelp.com/c-programs/gotoxy-clrscr-getch-getche-for-gcc-linux.aspx
 static struct termios old, new;
 
@@ -80,8 +77,10 @@ int getArrowPressed()
         return NONE;
 
 }
-
+#pragma endregion
 #else
+#pragma region Windows
+#include <conio.h>
 int getArrowPressed()
 {
     //inspiré de https://stackoverflow.com/a/10473315
@@ -106,6 +105,7 @@ int getArrowPressed()
         return NONE;
 
 }
+#pragma endregion
 #endif
 
 void clearScreen()

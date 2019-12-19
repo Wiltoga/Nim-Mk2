@@ -20,12 +20,13 @@
 
 Télécharger la [dernière version](https://github.com/WildGoat07/Nim-Mk2/releases/latest/download/nim.exe) **OU** Copiez / téléchargez le repo (cette méthode nécessite de rebuild le projet).
 
-Sur Linux :
+Sur _Linux_ :
 
 ```powershell
 make
 ```
-Ou sur Windows :
+
+Ou sur _Windows_ :
 
 > Nécessite d'avoir installé [MinGW](https://docs.google.com/document/d/1IYkS_ZOven-HJ6rKV5-hOzKwNFjYbwX55mPAaJxsUok/edit?usp=sharing).
 

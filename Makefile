@@ -3,7 +3,6 @@
 
 GCC := gcc
 workspace := 
-args := -W -Wall -ansi -pedantic
 
 all: nim.exe
 

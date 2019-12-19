@@ -71,7 +71,7 @@ Husein PARIC
 
 Ce projet est sous la license MIT. Regardez [``LICENSE``](https://github.com/WildGoat07/Nim-Mk2/blob/master/LICENSE) pour plus d'informations.
 
-Vous pouvez aussi lire la liste des [contributeurs](https://github.com/oxypomme/DofLog/contributors) qui ont participé à ce projet.
+Vous pouvez aussi lire la liste des [contributeurs](https://github.com/WildGoat07/Nim-Mk2/contributors) qui ont participé à ce projet.
 
 ## Contribute
 

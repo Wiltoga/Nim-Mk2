@@ -29,9 +29,3 @@ Position.o: $(workspace)src/Position.c
 
 utilities.o: $(workspace)src/utilities.c
 	$(GCC) -o $(workspace)obj/utilities.o -c $(workspace)src/utilities.c
-
-clean:
-	rm -r -Force $(workspace)obj/*.o
-
-mrproper: clean
-	rm -r -Force $(workspace)bin/nim.exe

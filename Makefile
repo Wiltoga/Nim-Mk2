@@ -1,31 +1,38 @@
+# PathToMake -f PathToMakeFile GCC=PathToGCC workspace=PathToProjectFolder
+# -f, GCC and workspace are optionnal
+
+GCC := gcc
+workspace := 
+args := -W -Wall -ansi -pedantic
+
 all: nim.exe
 
 nim.exe: main.o consoleManagement.o game.o help.o GamePlate.o Position.o utilities.o
-	gcc -o bin/nim obj/main.o obj/consoleManagement.o obj/game.o obj/help.o obj/GamePlate.o obj/Position.o obj/utilities.o
+	$(GCC) -o $(workspace)bin/nim $(workspace)obj/main.o $(workspace)obj/consoleManagement.o $(workspace)obj/game.o $(workspace)obj/help.o $(workspace)obj/GamePlate.o $(workspace)obj/Position.o $(workspace)obj/utilities.o
 
-main.o: src/main.c
-	gcc -o obj/main.o -c src/main.c
+main.o: $(workspace)src/main.c
+	$(GCC) -o $(workspace)obj/main.o -c $(workspace)src/main.c
 
-consoleManagement.o: src/consoleManagement.c
-	gcc -o obj/consoleManagement.o -c src/consoleManagement.c
+consoleManagement.o: $(workspace)src/consoleManagement.c
+	$(GCC) -o $(workspace)obj/consoleManagement.o -c $(workspace)src/consoleManagement.c
 
-game.o: src/game.c
-	gcc -o obj/game.o -c src/game.c
+game.o: $(workspace)src/game.c
+	$(GCC) -o $(workspace)obj/game.o -c $(workspace)src/game.c
 
-help.o: src/help.c
-	gcc -o obj/help.o -c src/help.c
+help.o: $(workspace)src/help.c
+	$(GCC) -o $(workspace)obj/help.o -c $(workspace)src/help.c
 
-GamePlate.o: src/GamePlate.c
-	gcc -o obj/GamePlate.o -c src/GamePlate.c
+GamePlate.o: $(workspace)src/GamePlate.c
+	$(GCC) -o $(workspace)obj/GamePlate.o -c $(workspace)src/GamePlate.c
 
-Position.o: src/Position.c
-	gcc -o obj/Position.o -c src/Position.c
+Position.o: $(workspace)src/Position.c
+	$(GCC) -o $(workspace)obj/Position.o -c $(workspace)src/Position.c
 
-utilities.o: src/utilities.c
-	gcc -o obj/utilities.o -c src/utilities.c
+utilities.o: $(workspace)src/utilities.c
+	$(GCC) -o $(workspace)obj/utilities.o -c $(workspace)src/utilities.c
 
 clean:
-	rm -r -Force obj/*.o
+	rm -r -Force $(workspace)obj/*.o
 
 mrproper: clean
-	rm -r -Force bin/nim.exe
+	rm -r -Force $(workspace)bin/nim.exe

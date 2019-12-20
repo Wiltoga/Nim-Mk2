@@ -23,7 +23,7 @@ Télécharger la [dernière version](https://github.com/WildGoat07/Nim-Mk2/relea
 Sur _Linux_ :
 
 ```powershell
-make
+$ make
 ```
 
 Ou sur _Windows_ :
@@ -31,7 +31,7 @@ Ou sur _Windows_ :
 > Nécessite d'avoir installé [MinGW](https://docs.google.com/document/d/1IYkS_ZOven-HJ6rKV5-hOzKwNFjYbwX55mPAaJxsUok/edit?usp=sharing).
 
 ```powershell
-mingw32-make
+> mingw32-make
 ```
 
 ## Utilisation
@@ -39,14 +39,16 @@ mingw32-make
 ### Linux
 
 ```powershell
-./bin/nim
+$ ./bin/nim
 ```
 
 ### Windows
 
 ```powershell
-./bin/nim.exe
+> ./bin/nim.exe
 ```
+
+Double cliquer sur executable marche aussi.
 
 ## Historique des Versions
 

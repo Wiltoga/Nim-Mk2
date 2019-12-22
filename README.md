@@ -71,8 +71,6 @@ Husein PARIC
 
 [![license](https://img.shields.io/github/license/WildGoat07/Nim-Mk2?style=for-the-badge)](https://github.com/WildGoat07/Nim-Mk2/blob/master/LICENSE)
 
-Ce projet est sous la license MIT. Regardez [``LICENSE``](https://github.com/WildGoat07/Nim-Mk2/blob/master/LICENSE) pour plus d'informations.
-
 Vous pouvez aussi lire la liste des [contributeurs](https://github.com/WildGoat07/Nim-Mk2/contributors) qui ont participé à ce projet.
 
 ## Contribute

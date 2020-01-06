@@ -17,7 +17,7 @@ struct Case
     bool banned;
     //vrai si la case est gagnante, sinon faux
     bool winning;
-    //tableau de 4 cases, contenant les cases valides pour un déplacement (NULL si un déplacement est impossible)
+    //tableau contenant les cases valides pour un déplacement (finissant par NULL)
     Table availableMovements;
 };
 

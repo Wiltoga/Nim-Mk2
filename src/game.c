@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "game.h"
 #include "Case.h"
 #include "Position.h"
@@ -224,7 +225,7 @@ Position Player(GamePlate *plate, Position pawn, char* playerName)
             tmpPos.x = pawn.x;
 
             //on vérifie qu'elle est valide
-            if (containsPosition(tmpPos, currentCase->availableMovements, 4))
+            if (containsPosition(tmpPos, currentCase->availableMovements))
             {
                 //si elle l'est, on mets à jour la position voulue
                 futurePos.y++;
@@ -243,7 +244,7 @@ Position Player(GamePlate *plate, Position pawn, char* playerName)
             tmpPos.y = pawn.y;
 
             //on vérifie qu'elle est valide
-            if (containsPosition(tmpPos, currentCase->availableMovements, 4))
+            if (containsPosition(tmpPos, currentCase->availableMovements))
             {
                 //si elle l'est, on mets à jour la position voulue
                 futurePos.x++;
@@ -261,13 +262,8 @@ Position Player(GamePlate *plate, Position pawn, char* playerName)
 Position IAPlaysRandomly(GamePlate *plate, Position currPos)
 {
     Case *current = accessCase(plate, currPos); //case sur laquelle se trouve le pion
-    while (true)
-    {
-        //tant qu'on a pas trouvé une position valide, on teste...
-        int randomIndex = randomNumber(0, 4);
-        if (current->availableMovements[randomIndex] != NULL)          //si notre position est valide,
-            return current->availableMovements[randomIndex]->position; //on renvoie cette sélection
-    }
+    int randomIndex = randomNumber(0, TableSize(current->availableMovements)); //on prend une position au hasard dedans
+    return current->availableMovements[randomIndex]->position; //on renvoie cette sélection
 }
 
 //l'IA applique la stratégie gagnante
@@ -275,13 +271,13 @@ Position IAPlaysHard(GamePlate *plate, Position currPos)
 {
     Case *current = accessCase(plate, currPos); //case sur laquelle se trouve le pion
     int i;
-    for (i = 0; i < 4; i++)
-    {
-        //on cherche une case gagnante parmis celles disponibles
-        if (current->availableMovements[i] != NULL &&
-            current->availableMovements[i]->winning)
-            return current->availableMovements[i]->position; //on l'a trouvé, on renvoie notre sélection
-    }
+    Case *available;
+    //on cherche une case gagnante parmis celles disponibles
+    while ((available = current->availableMovements[i]) != NULL)
+        if (available->winning)
+            return available->position; //on l'a trouvé, on renvoie notre sélection
+        else
+            i++;
     //sinon on joue aléatoirement
     return IAPlaysRandomly(plate, currPos);
 }
@@ -291,39 +287,35 @@ Position IAPlaysVeryHard(GamePlate *plate, Position currPos)
 {
     Case *current = accessCase(plate, currPos); //case sur laquelle se trouve le pion
     int i;
-    for (i = 0; i < 4; i++)
-    {
-        //on cherche une case gagnante parmis celles disponibles
-        if (current->availableMovements[i] != NULL &&
-            current->availableMovements[i]->winning)
-            return current->availableMovements[i]->position; //on l'a trouvé, on renvoie notre sélection
-    }
+    Case *available;
+    //on cherche une case gagnante parmis celles disponibles
+    while ((available = current->availableMovements[i]) != NULL)
+        if (available->winning)
+            return available->position; //on l'a trouvé, on renvoie notre sélection
+        else
+            i++;
 
     //on a pas trouvé de case gagnante, on cherche à contrer le joueur
-    for (i = 0; i < 4; i++)
+    i = 0;
+    while ((available = current->availableMovements[i]) != NULL)
     {
-        Case *caseToTest = current->availableMovements[i];
-
-        //on test chaque case possible
-        if (caseToTest != NULL)
-        {
-            int j;
-            bool hasWinningPossibilities = false; //on vérifie si chaque mouvement possible donne lieu à un mouvement gagnant
-            for (j = 0; j < 4; j++)
-            {
-                if (caseToTest->availableMovements[j] != NULL &&
-                    caseToTest->availableMovements[j]->winning)
-                    //si la case à tester possède une option de se trouver sur une case gagnante, on la marque
-                    hasWinningPossibilities = true;
-            }
-            /*
-             * si un déplacement propose une case qui elle ne propose aucun mouvement gagnant (apparait dans 
-             * de rares cas selon la configuration des cases bannies)
-             */
-            if (!hasWinningPossibilities)
-                //on renvoie ce mouvement qui va piéger le joueur
-                return caseToTest->position;
-        }
+        int j;
+        bool hasWinningPossibilities = false;
+        //on vérifie si chaque mouvement possible donne lieu à un mouvement gagnant
+        Case *futureMovement;
+        while ((futureMovement = current->availableMovements[j]) != NULL)
+            if (futureMovement->winning)
+                //si la case à tester possède une option de se trouver sur une case gagnante, on la marque
+                hasWinningPossibilities = true;
+            else
+                j++;
+        /*
+         * si un déplacement propose une case qui elle ne propose aucun mouvement gagnant (apparait dans 
+         * de rares cas selon la configuration des cases bannies)
+        */
+        if (!hasWinningPossibilities)
+            //on renvoie ce mouvement qui va piéger le joueur
+            return available->position;
     }
     //sinon on joue aléatoirement
     return IAPlaysRandomly(plate, currPos);

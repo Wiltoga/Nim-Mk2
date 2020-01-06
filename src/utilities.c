@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "utilities.h"
 
 inline int randomNumber(int min, int max)
@@ -25,16 +26,25 @@ bool containsCase(Case* toFind, Table plate, size_t size)
     //si rien n'a été trouvé, on renvoie false
     return false;
 }
-bool containsPosition(Position pos, Table plate, size_t size)
+bool containsPosition(Position pos, Table plate)
 {
-    int i;
+    Case* curr;
+    int i = 0;
     //on parcours le tableau...
-    for (i = 0;i<size;i++)
+    while ((curr = plate[i]) != NULL)
         //si on trouve une occurence, on renvoie true
-        if (plate[i] != NULL &&
-            plate[i]->position.x == pos.x &&
-            plate[i]->position.y == pos.y)
+        if (curr->position.x == pos.x &&
+            curr->position.y == pos.y)
             return true;
+        else
+            i++;
     //si rien n'a été trouvé, on renvoie false
     return false;
+}
+int TableSize(Table table)
+{
+    int size = 0;
+    while (table[size] != NULL)
+        size++;
+    return size;
 }

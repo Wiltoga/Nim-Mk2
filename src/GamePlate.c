@@ -87,13 +87,12 @@ GamePlate* createPlate(GameOptions options)
             Case* curr = accessCase(plate, newPosition(i, j));
             /*
              * on alloue un tableau de 4 cases voisines potentielles
-             * chaque case du tableau possèdera une case voisine, le tableau si finissant par NULL
+             * chaque case du tableau possèdera une case voisine, le tableau se finissant par NULL
              */
             curr->availableMovements = malloc(5*sizeof(Case*));
             int nbMovements = 0;
             //si on se trouve à une extremité de l'axe x
-            if (i == plate->nbColumns-1)
-            ;
+            if (i == plate->nbColumns-1);
             //si on se trouve une case avant le mur
             else if (i == plate->nbColumns-2)
             {
@@ -119,8 +118,7 @@ GamePlate* createPlate(GameOptions options)
                 }
             }
             //si on se trouve à une extremité de l'axe y
-            if (j == plate->nbRows-1)
-            ;
+            if (j == plate->nbRows-1);
             //si on se trouve une case avant le mur
             else if (j == plate->nbRows-2)
             {

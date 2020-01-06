@@ -48,8 +48,7 @@ void startGame()
     //formattage du bouton Retour
     printf(BACK_BLACK "\n\n" BACK_BRIGHT_RED FRONT_BLACK "Retour" BACK_BLACK "\n");
     //on attend la touche Entrée
-    while (getArrowPressed() != RETURN)
-        ;
+    while (getArrowPressed() != RETURN);
     //on libère la RAM
     freePlate(plate);
 }
@@ -66,7 +65,7 @@ GameOptions parameters()
         printf("Nombre de lignes du plateau :");
         scanf("%d", &options.nlig);
         getchar();
- } while (options.nlig > VMAX || options.nlig < VMIN);
+    } while (options.nlig > VMAX || options.nlig < VMIN);
 
     clearScreen();
 

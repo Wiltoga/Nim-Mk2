@@ -65,7 +65,8 @@ GameOptions parameters()
         //boucle qui demande le nombre de lignes tant que le nombre ne respecte pas les limites
         printf("Nombre de lignes du plateau :");
         scanf("%d", &options.nlig);
-    } while (options.nlig > VMAX || options.nlig < VMIN);
+        getchar();
+ } while (options.nlig > VMAX || options.nlig < VMIN);
 
     clearScreen();
 
@@ -74,6 +75,7 @@ GameOptions parameters()
         //boucle qui demande le nombre de colonnes tant que le nombre ne respecte pas les limites
         printf("Nombre de colonnes du plateau :");
         scanf("%d", &options.ncol);
+        getchar();
     } while (options.ncol > VMAX || options.ncol < VMIN);
 
     clearScreen();

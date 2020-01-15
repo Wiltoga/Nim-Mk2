@@ -1,6 +1,6 @@
 #ifndef DEF_UTILITIES_H
 #define DEF_UTILITIES_H
-#include "bool.h"
+#include <stdbool.h>
 #include "Case.h"
 #include "Position.h"
 

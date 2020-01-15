@@ -6,13 +6,13 @@ workspace :=
 
 all: nim
 
-nim: $(workspace)obj/main.o $(workspace)obj/consoleManagement.o $(workspace)obj/game.o $(workspace)obj/help.o $(workspace)obj/GamePlate.o $(workspace)obj/Position.o $(workspace)obj/utilities.o
+nim: $(workspace)obj/main.o $(workspace)obj/consoleManagement.o $(workspace)obj/game.o $(workspace)obj/help.o $(workspace)obj/GamePlate.o $(workspace)obj/Position.o $(workspace)obj/utilities.o $(workspace)obj/Case.o
 ifneq ("$(wildcard $(workspace)bin)", "")
 	@echo "bin exists"
 else
 	mkdir $(workspace)bin
 endif
-	$(GCC) -o $(workspace)bin/nim $(workspace)obj/main.o $(workspace)obj/consoleManagement.o $(workspace)obj/game.o $(workspace)obj/help.o $(workspace)obj/GamePlate.o $(workspace)obj/Position.o $(workspace)obj/utilities.o
+	$(GCC) -o $(workspace)bin/nim $(workspace)obj/main.o $(workspace)obj/consoleManagement.o $(workspace)obj/game.o $(workspace)obj/help.o $(workspace)obj/GamePlate.o $(workspace)obj/Position.o $(workspace)obj/utilities.o $(workspace)obj/Case.o
 
 $(workspace)obj/main.o: $(workspace)src/main.c
 ifneq ("$(wildcard $(workspace)obj)", "")
@@ -39,3 +39,6 @@ $(workspace)obj/Position.o: $(workspace)src/Position.c
 
 $(workspace)obj/utilities.o: $(workspace)src/utilities.c
 	$(GCC) -o $(workspace)obj/utilities.o -c $(workspace)src/utilities.c
+
+$(workspace)obj/Case.o: $(workspace)src/Case.c
+	$(GCC) -o $(workspace)obj/Case.o -c $(workspace)src/Case.c

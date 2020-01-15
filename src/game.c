@@ -4,14 +4,16 @@
 #include "Case.h"
 #include "Position.h"
 #include "consoleManagement.h"
-#include "bool.h"
+#include <stdbool.h>
 #include "GamePlate.h"
 #include "utilities.h"
+#include "constants.h"
 
 void startGame()
 {
     GameOptions options = parameters();      //on appelle le générateur de paramètres
     GamePlate *plate = createPlate(options); //on créé le plateau de jeu
+    dispNimbers(plate);
     Position pawn = newPosition(0, 0);       //on place le pion à (0,0)
     bool playerTurn = options.next;          //on défini par rapport aux paramètres qui commence
 
@@ -30,7 +32,7 @@ void startGame()
     }
     //si on est ici, on a un vainqueur
     clearScreen();
-
+    #ifndef NO_COLORS
     if (plate->level == MULTIPLAYER)
     {
         if (!playerTurn) //si l'un ou l'autre a gagngé..
@@ -48,6 +50,25 @@ void startGame()
 
     //formattage du bouton Retour
     printf(BACK_BLACK "\n\n" BACK_BRIGHT_RED FRONT_BLACK "Retour" BACK_BLACK "\n");
+    #else
+    if (plate->level == MULTIPLAYER)
+    {
+        if (!playerTurn) //si l'un ou l'autre a gagngé..
+            printf("\nLe joueur 1 a gagne !");
+        else
+            printf("\nLe joueur 2 a gagne !");
+    }
+    else
+    {
+        if (!playerTurn) //si l'un ou l'autre a gagngé..
+            printf("\nLe joueur a gagne !");
+        else
+            printf("\nLe joueur a perdu !");
+    }
+
+    //formattage du bouton Retour
+    printf("\n\n>Retour\n");
+    #endif
     //on attend la touche Entrée
     while (getArrowPressed() != RETURN);
     //on libère la RAM
@@ -56,7 +77,9 @@ void startGame()
 
 GameOptions parameters()
 {
+    #ifndef NO_COLORS
     printf(FRONT_WHITE BACK_BLACK);
+    #endif
     clearScreen();
     GameOptions options;
 
@@ -84,6 +107,7 @@ GameOptions parameters()
     int index = 1; //selecteur
     while (options.niveau == -1)
     {
+        #ifndef NO_COLORS
         printf(FRONT_WHITE BACK_BLACK "Multijoueur ?\n");
         if (index == 0) //couleur "oui"
             printf(FRONT_BLACK BACK_BRIGHT_CYAN);
@@ -95,6 +119,17 @@ GameOptions parameters()
         else
             printf(FRONT_MAGENTA BACK_BLACK);
         printf("Non" BACK_BLACK "\n");
+        #else
+        printf("Multijoueur ?\n");
+        if (index == 0) //"oui"
+            printf(">Oui\n");
+        else
+            printf(" Oui\n");
+        if (index == 1) //"non"
+            printf(">Non\n");
+        else
+            printf(" Non\n");
+        #endif
         switch (getArrowPressed())
         {
         case UP:
@@ -117,6 +152,7 @@ GameOptions parameters()
     index = 0; //selecteur
     while (options.niveau == -1)
     {
+        #ifndef NO_COLORS
         printf(FRONT_WHITE BACK_BLACK "difficulte de l'ordinateur :\n");
         if (index == 0) //couleur "debutant"
             printf(FRONT_BLACK BACK_BRIGHT_CYAN);
@@ -138,11 +174,27 @@ GameOptions parameters()
         else
             printf(FRONT_RED BACK_BLACK);
         printf("virtuose" BACK_BLACK "\n");
-        if (index == 4) //couleur "divin"
-            printf(FRONT_MAGENTA BACK_RED "D I V I N");
-        else
-            printf(FRONT_BRIGHT_MAGENTA BACK_BLACK "divin");
         printf(BACK_BLACK "\n");
+        #else
+        printf("difficulte de l'ordinateur :\n");
+        if (index == 0) //"debutant"
+            printf(">debutant\n");
+        else
+            printf(" debutant\n");
+        if (index == 1) //"moyen"
+            printf(">moyen\n");
+        else
+            printf(" moyen\n");
+        if (index == 2) //"expert"
+            printf(">expert\n");
+        else
+            printf(" expert\n");
+        if (index == 3) //"virtuose"
+            printf(">virtuose\n");
+        else
+            printf(" virtuose\n");
+        printf("\n");
+        #endif
         switch (getArrowPressed())
         {
         case UP:
@@ -155,7 +207,7 @@ GameOptions parameters()
             options.niveau = index;
             break;
         }
-        index = (index + 5) % 5; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
+        index = (index + 4) % 4; //pour faire une boucle (-1%5 = -1 en C, malheureusement...)
         clearScreen();
     }
     options.next = -1;
@@ -163,6 +215,7 @@ GameOptions parameters()
 
     while (options.next == -1)
     {
+        #ifndef NO_COLORS
         printf(FRONT_WHITE BACK_BLACK "qui commence ?\n");
         if (index == 0) //couleur "debutant"
             printf(FRONT_BLACK BACK_BRIGHT_CYAN);
@@ -180,6 +233,29 @@ GameOptions parameters()
             printf("le joueur 2" BACK_BLACK "\n");
         else
             printf("l'ordinateur" BACK_BLACK "\n");
+        #else
+        printf("qui commence ?\n");
+        if (index == 0) //"debutant"
+            if (options.niveau == MULTIPLAYER)
+                printf(">le joueur 1\n");
+            else
+                printf(">le joueur\n");
+        else
+            if (options.niveau == MULTIPLAYER)
+                printf(" le joueur 1\n");
+            else
+                printf(" le joueur\n");
+        if (index == 1) //"moyen"
+            if (options.niveau == MULTIPLAYER)
+                printf(">le joueur 2\n");
+            else
+                printf(">l'ordinateur\n");
+        else
+            if (options.niveau == MULTIPLAYER)
+                printf(" le joueur 2\n");
+            else
+                printf(" l'ordinateur\n");
+        #endif
         switch (getArrowPressed())
         {
         case UP:
@@ -269,7 +345,7 @@ Position IAPlaysRandomly(GamePlate *plate, Position currPos)
 Position IAPlaysHard(GamePlate *plate, Position currPos)
 {
     Case *current = accessCase(plate, currPos); //case sur laquelle se trouve le pion
-    int i;
+    int i = 0;
     Case *available;
     //on cherche une case gagnante parmis celles disponibles
     while ((available = current->availableMovements[i]) != NULL)
@@ -277,45 +353,6 @@ Position IAPlaysHard(GamePlate *plate, Position currPos)
             return available->position; //on l'a trouvé, on renvoie notre sélection
         else
             i++;
-    //sinon on joue aléatoirement
-    return IAPlaysRandomly(plate, currPos);
-}
-
-//l'IA applique la stratégie gagnante et en tente de gagner en cas de position perdante
-Position IAPlaysVeryHard(GamePlate *plate, Position currPos)
-{
-    Case *current = accessCase(plate, currPos); //case sur laquelle se trouve le pion
-    int i;
-    Case *available;
-    //on cherche une case gagnante parmis celles disponibles
-    while ((available = current->availableMovements[i]) != NULL)
-        if (available->winning)
-            return available->position; //on l'a trouvé, on renvoie notre sélection
-        else
-            i++;
-
-    //on a pas trouvé de case gagnante, on cherche à contrer le joueur
-    i = 0;
-    while ((available = current->availableMovements[i]) != NULL)
-    {
-        int j;
-        bool hasWinningPossibilities = false;
-        //on vérifie si chaque mouvement possible donne lieu à un mouvement gagnant
-        Case *futureMovement;
-        while ((futureMovement = current->availableMovements[j]) != NULL)
-            if (futureMovement->winning)
-                //si la case à tester possède une option de se trouver sur une case gagnante, on la marque
-                hasWinningPossibilities = true;
-            else
-                j++;
-        /*
-         * si un déplacement propose une case qui elle ne propose aucun mouvement gagnant (apparait dans 
-         * de rares cas selon la configuration des cases bannies)
-        */
-        if (!hasWinningPossibilities)
-            //on renvoie ce mouvement qui va piéger le joueur
-            return available->position;
-    }
     //sinon on joue aléatoirement
     return IAPlaysRandomly(plate, currPos);
 }
@@ -340,10 +377,6 @@ Position IA(GamePlate *plate, Position currPos)
     case VIRTUOSO: //si on est en virtuose
         //on joue toujours avec la stratégie gagnante
         newPos =  IAPlaysHard(plate, currPos);
-        break;
-    case GODLIKE: //si on est en mode divin
-        //on joue toujours avec la stratégie gagnante ET en essayant de piéger le joueur
-        newPos =  IAPlaysVeryHard(plate, currPos);
         break;
     }
     renderPlate(plate, currPos, newPos);  //on affiche...

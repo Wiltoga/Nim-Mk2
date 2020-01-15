@@ -1,7 +1,5 @@
 #ifndef DEF_GAME_H
 #define DEF_GAME_H
-#define VMIN 5
-#define VMAX 30
 #include "Position.h"
 #include "gameOptions.h"
 #include "GamePlate.h"

@@ -1,6 +1,6 @@
 #ifndef DEF_GAME_OPTIONS_H
 #define DEF_GAME_OPTIONS_H
-#include "bool.h"
+#include <stdbool.h>
 
 //Enumeration des modes de difficulté
 enum Difficulty
@@ -9,7 +9,6 @@ enum Difficulty
     MEDIUM,
     EXPERT,
     VIRTUOSO,
-    GODLIKE,
     MULTIPLAYER
 };
 typedef enum Difficulty Difficulty;

@@ -13,10 +13,14 @@ struct GamePlate
 };
 typedef struct GamePlate GamePlate;
 
-GamePlate* createPlate(GameOptions); //créé un tableau rempli un tableau selon certaines règles
-Case* accessCase(GamePlate*, Position); //accède à une certaine case du plateau selon une position donnée
-void freePlate(GamePlate*); //libère un plateau
-
+//créé un tableau rempli un tableau selon certaines règles
+GamePlate* createPlate(GameOptions); 
+//accède à une certaine case du plateau selon une position donnée
+Case* accessCase(GamePlate*, Position); 
+//libère un plateau
+void freePlate(GamePlate*);
+//DEBUG : affiche les nimbers du plateau
+void dispNimbers(GamePlate* plate);
 //affiche le plateau à l'écran en donnant la position du pion au début du tour et sa position temporaire choisie
 void renderPlate(GamePlate*, Position, Position);
 

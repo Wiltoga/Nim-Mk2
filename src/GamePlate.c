@@ -4,6 +4,7 @@
 #include "GamePlate.h"
 #include "Position.h"
 #include "utilities.h"
+#include "constants.h"
 
 GamePlate* createPlate(GameOptions options)
 {
@@ -17,22 +18,14 @@ GamePlate* createPlate(GameOptions options)
     plate->cases[options.nlig*options.ncol] = NULL;
 
     int i, j;//indexeurs
-
-    //l'indice de victoire est une valeur qui permet de savoir si une case est gagnante ou pas,
-    //étant donné que le plateau suit un shéma particulier (une diagonale de case perdante puis 2 diagonales de cases gagnantes)
-    int winningHint = ((options.nlig - 1) + (options.ncol - 1)*2)%3;
-
-    for (i = 0;i<options.nlig;i++)
-        for (j = 0;j<options.ncol;j++)
-        {
-            //pour chaque case du tableau, on créé un objet Case
-            Case* tmpCase = malloc(sizeof(Case));
-            tmpCase->banned = false;
-            plate->cases[j + i*options.ncol] = tmpCase;
-            tmpCase->position = newPosition(j, i);
-            tmpCase->winning = (i + j*2)%3 == winningHint; //test de case gagnante
-        }
-        
+    for (i=0;i<options.nlig*options.ncol;i++)
+    {
+        Case* curr = malloc(sizeof(Case));
+        curr->position.x = i%options.ncol;
+        curr->position.y = i/options.nlig;
+        curr->banned = false;
+        plate->cases[i] = curr;
+    }
     for (i = 0;i<options.nban;i++) //on génère options.nban cases à bannir
     {
         bool nextBan = false; //deviens true quand tous les tests sont passés
@@ -78,7 +71,6 @@ GamePlate* createPlate(GameOptions options)
                 accessCase(plate, newPosition(x, y))->banned = true;
         }
     }
-    
     for (i = 0;i<plate->nbColumns;i++)
         for (j = 0;j<plate->nbRows;j++)
         {
@@ -103,7 +95,6 @@ GamePlate* createPlate(GameOptions options)
             else
             {
                 //ici on se trouve ailleurs dans le plateau
-                
                 Case* tmp = accessCase(plate, newPosition(i+1, j)); //on récupère la case à droite
                 if (!tmp->banned)
                     curr->availableMovements[nbMovements++] = tmp; //si elle n'est pas bannie, on l'ajoute aux voisines
@@ -145,9 +136,79 @@ GamePlate* createPlate(GameOptions options)
             }
             curr->availableMovements[nbMovements] = NULL;
         }
-
-
+    //nimbers
+    {
+        Table open = malloc((plate->nbRows*plate->nbColumns)*sizeof(Case*));
+        int openLen = 0;
+        for (i = 0;i<plate->nbColumns;i++)
+            for(j = 0;j<plate->nbRows;j++)
+                if ((i != plate->nbColumns-1 || j != plate->nbRows-1))
+                        open[openLen++] = accessCase(plate, newPosition(i, j));
+        open[openLen] = NULL;
+        accessCase(plate, newPosition(plate->nbColumns-1, plate->nbRows-1))->winning = true;
+        while (openLen > 0)
+        {
+            Case* currentOpen;
+            for(i = 0;i<openLen;i++)
+            {
+                currentOpen = open[i];
+                bool hasUndefined = false;
+                for(j=0;currentOpen->availableMovements[j] != NULL;j++)
+                    if (findCase(open, currentOpen->availableMovements[j]) > -1)
+                        hasUndefined = true;
+                if (!hasUndefined)
+                {
+                    bool hasWinningPossibilities = false;
+                    for(j=0;currentOpen->availableMovements[j] != NULL;j++)
+                        if (currentOpen->availableMovements[j]->winning)
+                            hasWinningPossibilities = true;
+                    if (currentOpen->banned)
+                        hasWinningPossibilities = true;
+                    currentOpen->winning = !hasWinningPossibilities;
+                    removeCase(open, currentOpen);
+                    openLen--;
+                }
+            }
+        }
+        free(open);
+    }
+    
     return plate;
+}
+
+void dispNimbers(GamePlate* plate)
+{
+    #ifndef NO_COLORS
+    printf(FRONT_WHITE);
+    int i, j;
+    for (i=0;i<plate->nbRows;i++)
+    {
+        for (j=0;j<plate->nbColumns;j++)
+        {
+            Case* current = accessCase(plate, newPosition(j, i));
+            if (current->banned)
+                printf(BACK_BRIGHT_RED);
+            else
+                printf(BACK_BLACK);
+            printf("%d", current->winning?0:1);
+        }
+        printf("\n");
+    }
+    #else
+    int i, j;
+    for (i=0;i<plate->nbRows;i++)
+    {
+        for (j=0;j<plate->nbColumns;j++)
+        {
+            Case* current = accessCase(plate, newPosition(j, i));
+            if (current->banned)
+                printf("X");
+            else
+                printf("%d", current->winning?0:1);
+        }
+        printf("\n");
+    }
+    #endif
 }
 
 Case* accessCase(GamePlate* plate, Position pos)
@@ -172,7 +233,9 @@ void freePlate(GamePlate* plate)
 void renderPlate(GamePlate* plate, Position pawnPos, Position currentSelection)
 {
     clearScreen(); //on efface l'écran
+    #ifndef NO_COLORS
     printf(FRONT_WHITE); //sélection de la couleur d'écriture
+    #endif
     
     //indexes
     int i, j;
@@ -184,9 +247,9 @@ void renderPlate(GamePlate* plate, Position pawnPos, Position currentSelection)
         for (i = 0;i<plate->nbColumns;i++)
         {
            //pour chaque case du plateau
-
            //on en récupère la case 
             Case* currentCase = accessCase(plate, newPosition(i, j));
+            #ifndef NO_COLORS
             if (currentCase == pawnCase)
                 //si la case est celle du pion, on mets en jaune
                 printf(BACK_YELLOW);
@@ -212,8 +275,25 @@ void renderPlate(GamePlate* plate, Position pawnPos, Position currentSelection)
             else
                 //sinon on mets rien
                 printf("  ");
+            #else
+            if (currentSelection.x == i && currentSelection.y == j)
+                //si on se trouve sur la selection de position du pion, on mets un triangle
+                printf("/\\");
+            else if (containsCase(currentCase, pawnCase->availableMovements, 4))
+                //si la case correspond à un mouvement autorisé, on mets une marque
+                printf("__");
+            else if (currentCase->banned)
+                //si la case est bannie, on mets en rouge
+                printf("XX");
+            else
+                //sinon, on colore le fond du plateau en gris
+                printf("--");
+            #endif
         }
+        #ifndef NO_COLORS
         //chaque ligne doit se finir par du noir, sinon toute la ligne de la console sera de la couleur précédente
-        printf(BACK_BLACK "\n");
+        printf(BACK_BLACK);
+        #endif
+        printf("\n");
     }
 }

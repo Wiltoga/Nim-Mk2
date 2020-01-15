@@ -2,6 +2,8 @@
 #define DEF_CONSOLE_COLORS_H
 //https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 //pour utiliser ces chaines ANSI, taper "printf(<code>)" pour changer la couleur de la console
+//#define NO_COLORS   //(dé)commenter pour utiliser la version avec/sans couleurs
+#ifndef NO_COLORS
 #define FRONT_BLACK             "\x1b[30m"
 #define BACK_BLACK              "\x1b[40m"
 #define FRONT_RED               "\x1b[31m"
@@ -34,7 +36,7 @@
 #define BACK_BRIGHT_CYAN        "\x1b[106m"
 #define FRONT_WHITE             "\x1b[97m"
 #define BACK_WHITE              "\x1b[107m"
-
+#endif
 //ces codes sont retournés par getArrowPressed()
 #define NONE -1
 #define UP 0

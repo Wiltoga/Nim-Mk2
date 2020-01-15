@@ -87,7 +87,8 @@ int getArrowPressed()
     int var = getch(); //on récupère le code du caractère entré dans la console
     if (var == 0 || var == 224) //s'il s'agit d'une flèche...
     {
-        switch (getch())
+        var = getch();
+        switch (var)
         {
         case 72: //code fèche haut
             return UP;

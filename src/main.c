@@ -3,7 +3,7 @@
 #include <time.h>
 #include "game.h"
 #include "consoleManagement.h"
-#include "bool.h"
+#include <stdbool.h>
 #include "help.h"
 
 int main()
@@ -13,7 +13,9 @@ int main()
     int index = 0; //l'index représente la position du curseur dans les menus
     while (true)//boucle du jeu
     {
+        #ifndef NO_COLORS
         printf(FRONT_BRIGHT_CYAN BACK_BLACK);
+        #endif
         //http://patorjk.com/software/taag/#p=display&f=Standard&t=Nim
         printf(
         "  _   _ _           \n"
@@ -22,6 +24,7 @@ int main()
         " | |\\  | | | | | | |\n"
         " |_| \\_|_|_| |_| |_|\n");
         printf("______________________\npar Nathan HANEN, Tom SUBLET, Husein PARIC\n\n");
+        #ifndef NO_COLORS
         printf(FRONT_GREY BACK_BLACK "Utiliser les fleches pour se deplacer, Entree pour valider.\n\n");
         if (index == 0)//couleur "jouer"
             printf(FRONT_BLACK BACK_BRIGHT_GREEN);
@@ -38,6 +41,21 @@ int main()
         else
             printf(FRONT_RED BACK_BLACK);
         printf("Quitter" BACK_BLACK "\n");
+        #else
+        printf("Utiliser les fleches pour se deplacer, Entree pour valider.\n\n");
+        if (index == 0)//couleur "jouer"
+            printf(">Jouer\n");
+        else
+            printf(" Jouer\n");
+        if (index == 1)//couleur "aide"
+            printf(">Aide\n");
+        else
+            printf(" Aide\n");
+        if (index == 2)//couleur "quitter"
+            printf(">Quitter\n");
+        else
+            printf(" Quitter\n");
+        #endif
         switch (getArrowPressed())
         {
         case UP:
@@ -56,8 +74,10 @@ int main()
                 help();
                 break;
             case 2://quitter
-             //reset de la couleur de la console
+                #ifndef NO_COLORS
+               //reset de la couleur de la console
                 printf(FRONT_WHITE BACK_BLACK);
+                #endif
                 exit(0);
             }
             break;

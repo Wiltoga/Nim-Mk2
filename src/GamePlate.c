@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include "consoleManagement.h"
 #include "GamePlate.h"
 #include "Position.h"

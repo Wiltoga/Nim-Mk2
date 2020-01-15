@@ -21,6 +21,7 @@ GamePlate* createPlate(GameOptions options)
     int i, j;//indexeurs
     for (i=0;i<options.nlig*options.ncol;i++)
     {
+        //initialisation de chaque champs de la case possible
         Case* curr = malloc(sizeof(Case));
         curr->position.x = i%options.ncol;
         curr->position.y = i/options.nlig;
@@ -139,38 +140,60 @@ GamePlate* createPlate(GameOptions options)
         }
     //nimbers
     {
+        //open est une liste de toutes les cases qui n'ont pas été définies (finissant par NULL)
         Table open = malloc((plate->nbRows*plate->nbColumns)*sizeof(Case*));
+        //openLen contiendra la taille de la liste (redondant, oui, mais pour des raisons d'optimisations)
         int openLen = 0;
+        //on parcours le plateau
         for (i = 0;i<plate->nbColumns;i++)
             for(j = 0;j<plate->nbRows;j++)
+                //si la case en question n'est pas la dernière case du plateau
                 if ((i != plate->nbColumns-1 || j != plate->nbRows-1))
-                        open[openLen++] = accessCase(plate, newPosition(i, j));
+                    //on l'ajoute à la liste des cases indéfinies
+                    open[openLen++] = accessCase(plate, newPosition(i, j));
+        //on mets le dernier élement à NULL car la liste doit se finir par NULL
         open[openLen] = NULL;
+        //on assigne le puit à un nimber de 0
         accessCase(plate, newPosition(plate->nbColumns-1, plate->nbRows-1))->winning = true;
-        while (openLen > 0)
+        while (openLen > 0) //tant qu'il y a des cases indéfinies
         {
-            Case* currentOpen;
             for(i = 0;i<openLen;i++)
             {
-                currentOpen = open[i];
+                //notre cases indéfinie actuellement traitée
+                Case* currentOpen = open[i];
+                //deviens true si une de ses voisines est indéfinie
                 bool hasUndefined = false;
+                //on parcours ses voisines...
                 for(j=0;currentOpen->availableMovements[j] != NULL;j++)
+                    //si on trouve une voisine qui est indéfinie (qui se trouve dans la liste)
                     if (findCase(open, currentOpen->availableMovements[j]) > -1)
+                        //on mets le booléen à true
                         hasUndefined = true;
+                //si aucune de ses voisines n'est déterminée
                 if (!hasUndefined)
                 {
+                    //deviens true si ses voisines ont un nimber 0
                     bool hasWinningPossibilities = false;
+                    //on parcours ses voisines
                     for(j=0;currentOpen->availableMovements[j] != NULL;j++)
+                        //si une voisine a un nimber de 0
                         if (currentOpen->availableMovements[j]->winning)
+                            //on spécifie que notre case peut appliquer la stratégie gagnante
                             hasWinningPossibilities = true;
+                    //si notre case est bannie
                     if (currentOpen->banned)
+                        //on dit automatiquement qu'elle a une possibilité de victoire (pour lui donner un nimber de 1)
                         hasWinningPossibilities = true;
+                    //on lui donne un nimber en rapport à sa capacité à appliquer la stratégie gagnante
                     currentOpen->winning = !hasWinningPossibilities;
+                    //on supprime notre case de celles indéfinies
                     removeCase(open, currentOpen);
+                    //on décrémente la taille
                     openLen--;
                 }
             }
         }
+        //on libère l'espace alloué à la liste indéfinie
         free(open);
     }
     

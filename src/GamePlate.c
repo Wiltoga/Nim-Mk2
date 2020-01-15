@@ -254,14 +254,14 @@ void renderPlate(GamePlate* plate, Position pawnPos, Position currentSelection)
             if (currentCase == pawnCase)
                 //si la case est celle du pion, on mets en jaune
                 printf(BACK_YELLOW);
-            else if (containsCase(currentCase, pawnCase->availableMovements, 4) &&
+            else if (containsCase(currentCase, pawnCase->availableMovements) &&
                     i == plate->nbColumns-1 && j == plate->nbRows-1)
                 //si la case est le puit et qu'il est disponible, on le mets en doré
                 printf(BACK_BRIGHT_YELLOW);
             else if (i == plate->nbColumns-1 && j == plate->nbRows-1)
                 //si la case est juste le puit, on mets en vert
                 printf(BACK_GREEN);
-            else if (containsCase(currentCase, pawnCase->availableMovements, 4))
+            else if (containsCase(currentCase, pawnCase->availableMovements))
                 //si la case correspond à un mouvement autorisé, on mets en bleu
                 printf(BACK_BLUE);
             else if (currentCase->banned)
@@ -280,7 +280,7 @@ void renderPlate(GamePlate* plate, Position pawnPos, Position currentSelection)
             if (currentSelection.x == i && currentSelection.y == j)
                 //si on se trouve sur la selection de position du pion, on mets un triangle
                 printf("/\\");
-            else if (containsCase(currentCase, pawnCase->availableMovements, 4))
+            else if (containsCase(currentCase, pawnCase->availableMovements))
                 //si la case correspond à un mouvement autorisé, on mets une marque
                 printf("__");
             else if (currentCase->banned)

@@ -11,7 +11,7 @@ int max(int, int);
 //renvoie la plus petite valeur
 int min(int, int);
 //renvoie true si la case passée en paramètre est dans le tableau
-bool containsCase(Case*, Table, size_t);
+bool containsCase(Case*, Table);
 //renvoie true si la position passée en paramètre est trouvée parmis les cases du tableau
 bool containsPosition(Position, Table);
 //renvoie la taille d'un plateau

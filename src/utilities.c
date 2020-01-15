@@ -15,14 +15,16 @@ inline int min(int val1, int val2)
 {
     return val1 < val2 ? val1 : val2; 
 }
-bool containsCase(Case* toFind, Table plate, size_t size)
+bool containsCase(Case* toFind, Table plate)
 {
-    int i;
+    int i=0;
     //on parcours le tableau...
-    for (i = 0;i<size;i++)
+    while(plate[i]!=NULL)
         //si on trouve une occurence, on renvoie true
         if (plate[i] == toFind)
             return true;
+        else
+            i++;
     //si rien n'a été trouvé, on renvoie false
     return false;
 }

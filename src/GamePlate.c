@@ -24,7 +24,7 @@ GamePlate* createPlate(GameOptions options)
         //initialisation de chaque champs de la case possible
         Case* curr = malloc(sizeof(Case));
         curr->position.x = i%options.ncol;
-        curr->position.y = i/options.nlig;
+        curr->position.y = i/options.ncol;
         curr->banned = false;
         plate->cases[i] = curr;
     }
